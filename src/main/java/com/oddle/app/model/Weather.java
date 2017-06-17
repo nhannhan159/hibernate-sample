@@ -1,15 +1,20 @@
 package com.oddle.app.model;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.HashMap;
 import java.util.Map;
 
+@Entity
+@Table(name = "weather")
 public class Weather {
 
+    @Id
     private Integer id;
     private String main;
     private String description;
     private String icon;
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     public Integer getId() {
         return id;
@@ -41,14 +46,6 @@ public class Weather {
 
     public void setIcon(String icon) {
         this.icon = icon;
-    }
-
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
     }
 
 }

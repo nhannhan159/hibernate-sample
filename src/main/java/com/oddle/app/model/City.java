@@ -1,96 +1,19 @@
 package com.oddle.app.model;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Entity
+@Table(name = "city")
 public class City {
 
-    private Coord coord;
-    private Sys sys;
-    private List<Weather> weather = new ArrayList<>();
-    private String base;
-    private Main main;
-    private Wind wind;
-    private Clouds clouds;
-    private Integer dt;
-    private Integer id;
+    @Id
     private String name;
-    private Integer cod;
-    private Map<String, Object> additionalProperties = new HashMap<>();
 
-    public Coord getCoord() {
-        return coord;
-    }
-
-    public void setCoord(Coord coord) {
-        this.coord = coord;
-    }
-
-    public Sys getSys() {
-        return sys;
-    }
-
-    public void setSys(Sys sys) {
-        this.sys = sys;
-    }
-
-    public List<Weather> getWeather() {
-        return weather;
-    }
-
-    public void setWeather(List<Weather> weather) {
-        this.weather = weather;
-    }
-
-    public String getBase() {
-        return base;
-    }
-
-    public void setBase(String base) {
-        this.base = base;
-    }
-
-    public Main getMain() {
-        return main;
-    }
-
-    public void setMain(Main main) {
-        this.main = main;
-    }
-
-    public Wind getWind() {
-        return wind;
-    }
-
-    public void setWind(Wind wind) {
-        this.wind = wind;
-    }
-
-    public Clouds getClouds() {
-        return clouds;
-    }
-
-    public void setClouds(Clouds clouds) {
-        this.clouds = clouds;
-    }
-
-    public Integer getDt() {
-        return dt;
-    }
-
-    public void setDt(Integer dt) {
-        this.dt = dt;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
+    private List<CityWeather> cityWeathers;
 
     public String getName() {
         return name;
@@ -100,20 +23,12 @@ public class City {
         this.name = name;
     }
 
-    public Integer getCod() {
-        return cod;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "city")
+    public List<CityWeather> getCityWeathers() {
+        return cityWeathers;
     }
 
-    public void setCod(Integer cod) {
-        this.cod = cod;
+    public void setCityWeathers(List<CityWeather> cityWeathers) {
+        this.cityWeathers = cityWeathers;
     }
-
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
-    }
-
 }

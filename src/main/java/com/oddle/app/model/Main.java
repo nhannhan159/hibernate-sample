@@ -11,7 +11,6 @@ public class Main {
     private Integer humidity;
     private Double tempMin;
     private Double tempMax;
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
     public Double getTemp() {
         return temp;
@@ -55,14 +54,6 @@ public class Main {
     @JsonProperty("temp_max")
     public void setTempMax(Double tempMax) {
         this.tempMax = tempMax;
-    }
-
-    public Map<String, Object> getAdditionalProperties() {
-        return this.additionalProperties;
-    }
-
-    public void setAdditionalProperty(String name, Object value) {
-        this.additionalProperties.put(name, value);
     }
 
 }
