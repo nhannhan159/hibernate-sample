@@ -1,9 +1,10 @@
 package com.oddle.app.model;
 
-import java.util.HashMap;
-import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import javax.persistence.Embeddable;
+
+@Embeddable
 public class Main {
 
     private Double temp;

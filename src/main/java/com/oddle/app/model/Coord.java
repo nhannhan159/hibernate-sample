@@ -1,8 +1,8 @@
 package com.oddle.app.model;
 
-import java.util.HashMap;
-import java.util.Map;
+import javax.persistence.Embeddable;
 
+@Embeddable
 public class Coord {
 
     private Double lon;

@@ -1,18 +1,18 @@
 package com.oddle.app.model;
 
-import java.util.HashMap;
-import java.util.Map;
+import javax.persistence.Embeddable;
 
+@Embeddable
 public class Clouds {
 
-    private Integer all;
+    private Integer allc;
 
-    public Integer getAll() {
-        return all;
+    public Integer getAllc() {
+        return allc;
     }
 
-    public void setAll(Integer all) {
-        this.all = all;
+    public void setAllc(Integer allc) {
+        this.allc = allc;
     }
 
 }

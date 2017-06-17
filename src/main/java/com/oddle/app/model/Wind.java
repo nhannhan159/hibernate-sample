@@ -1,8 +1,10 @@
 package com.oddle.app.model;
 
+import javax.persistence.Embeddable;
 import java.util.HashMap;
 import java.util.Map;
 
+@Embeddable
 public class Wind {
 
     private Double speed;

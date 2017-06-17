@@ -13,6 +13,7 @@ public class City {
     @Id
     private String name;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "city", cascade = CascadeType.ALL)
     private List<CityWeather> cityWeathers;
 
     public String getName() {
@@ -23,7 +24,6 @@ public class City {
         this.name = name;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "city")
     public List<CityWeather> getCityWeathers() {
         return cityWeathers;
     }

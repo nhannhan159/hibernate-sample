@@ -5,19 +5,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "city-weather")
+@Table(name = "cityweather")
 public class CityWeather {
 
     @Id
     private Integer id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "name", nullable = false)
     private City city;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "cityWeather", cascade = CascadeType.ALL)
+    private List<Weather> weather;
+
+    @Embedded
     private Coord coord;
+
+    @Embedded
+    @AttributeOverride(name = "id", column = @Column(name = "sysid"))
     private Sys sys;
-    private List<Weather> weather = new ArrayList<>();
-    private String base;
+
+    @Embedded
     private Main main;
+
+    @Embedded
     private Wind wind;
+
+    @Embedded
     private Clouds clouds;
+
+    private String base;
     private Integer dt;
     private Integer cod;
 
@@ -93,7 +110,6 @@ public class CityWeather {
         this.id = id;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
     public City getCity() {
         return city;
     }

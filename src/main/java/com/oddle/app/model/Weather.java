@@ -1,8 +1,6 @@
 package com.oddle.app.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,6 +10,11 @@ public class Weather {
 
     @Id
     private Integer id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "weatherid", nullable = false)
+    private CityWeather cityWeather;
+
     private String main;
     private String description;
     private String icon;

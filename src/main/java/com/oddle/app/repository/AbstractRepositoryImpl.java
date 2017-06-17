@@ -13,14 +13,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class AbstractRepositoryImpl<E, K extends Serializable> implements AbstractRepository<E, K> {
+public abstract class AbstractRepositoryImpl<E, K extends Serializable> implements AbstractRepository<E, K> {
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	@Autowired
 	private SessionFactory sessionFactory;
 
-	private Class<? extends E> repositoryClazz;
+	protected Class<? extends E> repositoryClazz;
 
 	protected Session getCurrentSession(){
 		return this.sessionFactory.getCurrentSession();
@@ -30,14 +30,14 @@ public class AbstractRepositoryImpl<E, K extends Serializable> implements Abstra
 	@Override
 	public Optional<E> get(K id) throws Exception {
 		Session session = this.getCurrentSession();
-		return Optional.ofNullable((E) session.get(repositoryClazz, id));
+		return Optional.ofNullable((E) session.get(this.repositoryClazz, id));
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<E> getAll() throws Exception {
 		Session session = this.getCurrentSession();
-		return session.createCriteria(repositoryClazz).list();
+		return session.createCriteria(this.repositoryClazz).list();
 	}
 
 	@Override

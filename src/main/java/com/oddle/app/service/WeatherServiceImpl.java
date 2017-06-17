@@ -6,19 +6,18 @@ import com.oddle.app.repository.CityRepository;
 import com.oddle.app.repository.CityWeatherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class WeatherServiceImpl implements WeatherService {
 
 	@Autowired
-	private Environment environment;
-
-	@Autowired
-	private RestTemplate restTemplate;
+	private RemoteWeatherService remoteWeatherService;
 
 	@Autowired
 	private CityRepository cityRepository;
@@ -43,7 +42,22 @@ public class WeatherServiceImpl implements WeatherService {
 
 	@Override
 	public List<CityWeather> getCityWeathers() throws Exception {
+		List<City> cities = this.cityRepository.getAll();
+		for (City city : cities) {
+			CityWeather cityWeather = this.remoteWeatherService.getCityWeather(city.getName());
+
+		}
+
 		return this.cityWeatherRepository.getAll();
+	}
+
+	@Override
+	public List<CityWeather> getCityWeathers(String city) throws Exception {
+		CityWeather cityWeather = this.remoteWeatherService.getCityWeather(city);
+//		List<CityWeather> cityWeathers = this.cityWeatherRepository.getByCityName(city);
+		List<CityWeather> cityWeathers = new ArrayList<>();
+		cityWeathers.add(cityWeather);
+		return cityWeathers;
 	}
 
 	@Override

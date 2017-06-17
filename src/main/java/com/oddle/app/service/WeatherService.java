@@ -15,5 +15,7 @@ public interface WeatherService {
 
 	List<CityWeather> getCityWeathers() throws Exception;
 
+	List<CityWeather> getCityWeathers(String city) throws Exception;
+
 	void removeCityWeather(CityWeather cityWeather) throws Exception;
 }
