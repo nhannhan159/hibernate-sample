@@ -39,7 +39,10 @@ public class WeatherServiceImpl implements WeatherService {
 	@Override
 	public CityWeather fetchAndSaveCityWeather(String cityName) throws Exception {
 		CityWeather cityWeather = this.remoteWeatherService.fetchCityWeather(cityName);
-		return this.cityWeatherRepository.saveOrUpdate(cityWeather);
+		if (cityName.equals(cityWeather.getName())) {
+			return this.cityWeatherRepository.saveOrUpdate(cityWeather);
+		}
+		return null;
 	}
 
 	@Override

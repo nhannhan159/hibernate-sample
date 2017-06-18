@@ -8,30 +8,20 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
-@RequestMapping("/")
+@RestController
+@RequestMapping("/api")
 public class WeatherController {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	@Autowired
 	private WeatherService weatherService;
 
-//	@RequestMapping(value = { "/", "/list" }, method = RequestMethod.GET)
-//	public String list(ModelMap model) throws Exception {
-//		List<CityWeather> cityWeathers = this.weatherService.getCityWeathers();
-//		model.addAttribute("message", "This is a boilerplate project");
-//		model.addAttribute("cityWeather", cityWeathers);
-//		return "weather";
-//	}
-
 	@RequestMapping(value = { "/cities" }, method = RequestMethod.GET)
-	@ResponseBody
 	public ResponseEntity getCities() {
 		ResponseEntity responseEntity;
 		try {
@@ -45,7 +35,6 @@ public class WeatherController {
 	}
 
 	@RequestMapping(value = { "/cities/{name}" }, method = RequestMethod.POST)
-	@ResponseBody
 	public ResponseEntity addCity(@PathVariable String name) {
 		ResponseEntity responseEntity;
 		try {
@@ -59,7 +48,6 @@ public class WeatherController {
 	}
 
 	@RequestMapping(value = { "/cities/{name}" }, method = RequestMethod.DELETE)
-	@ResponseBody
 	public ResponseEntity deleteCity(@PathVariable String name) {
 		ResponseEntity responseEntity;
 		try {
@@ -73,7 +61,6 @@ public class WeatherController {
 	}
 
 	@RequestMapping(value = { "/cityWeathers" }, method = RequestMethod.GET)
-	@ResponseBody
 	public ResponseEntity getCityWeathers(@RequestParam(required = false) String cityName) {
 		ResponseEntity responseEntity;
 		try {
@@ -92,7 +79,6 @@ public class WeatherController {
 	}
 
 	@RequestMapping(value = { "/cityWeathers/{id}" }, method = RequestMethod.DELETE)
-	@ResponseBody
 	public ResponseEntity deleteCityWeather(@PathVariable Integer id) {
 		ResponseEntity responseEntity;
 		try {

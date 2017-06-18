@@ -18,6 +18,7 @@ public class TimeOption {
 		thirdShift.print();
 		forthShift.print();
 
+		System.out.println("\nReal opening hours:");
 		OpeningHours openingHours = new OpeningHours();
 		openingHours.feedShift(firstShift);
 		openingHours.feedShift(secondShift);
@@ -26,11 +27,22 @@ public class TimeOption {
 		openingHours.print();
 	}
 
+	/**
+	 * This class used to collect shift hours
+	 * and print opening hours in pretty format
+	 *
+	 * @author  Tien Tan
+	 * @since   2017-06-18
+	 */
 	public class OpeningHours {
+
+		/** List of weekdays used as data structure */
 		List<HourPerDay> weekdays;
+
+		/** Mapping for finding index of day quickly */
 		Map<String, Integer> weekdaysMapping;
 
-
+		/** Init all weekdays configuration */
 		public OpeningHours() {
 			//Init opening hours
 			this.weekdays = new ArrayList<>();
@@ -53,13 +65,21 @@ public class TimeOption {
 			this.weekdaysMapping.put("Sunday", 6);
 		}
 
+		/**
+		 * Feeding new shift hours to current opening hours
+		 * @param shift a set of shift hours
+		 */
 		public void feedShift(Shift shift) {
-			for (int i = this.weekdaysMapping.get(shift.startDay); i <= this.weekdaysMapping.get(shift.endDay); i++) {
+			for (int i = this.weekdaysMapping.get(shift.startDay);
+				 i <= this.weekdaysMapping.get(shift.endDay);
+				 i++) {
 				this.weekdays.get(i).feedShift(shift);
 			}
 		}
 
+		/** Print the opening hours in pretty format */
 		public void print() {
+			//Mark all same time structure of days and print them
 			String sameDay = this.weekdays.get(0).getWeekday();
 			for (int i = 1; i <= 7; i++) {
 				if (i == 7 || !this.weekdays.get(i).compare(this.weekdays.get(i - 1))) {
@@ -72,10 +92,25 @@ public class TimeOption {
 		}
 	}
 
+	/**
+	 * This class used to collect shift hours
+	 * and print opening hours in one day
+	 *
+	 * @author  Tien Tan
+	 * @since   2017-06-18
+	 */
 	public class HourPerDay {
+
+		/** Name of this weekday */
 		private String weekday;
+
+		/** Store opening hours for this day */
 		private List<Boolean> hours;
 
+		/**
+		 * Initial data structure for storing opening hours
+		 * @param weekday Name of this weekday
+		 */
 		public HourPerDay(String weekday) {
 			this.weekday = weekday;
 			this.hours = new ArrayList<>();
@@ -84,6 +119,11 @@ public class TimeOption {
 			}
 		}
 
+		/**
+		 * Compare opening hours structure with another day
+		 * @param  anotherDay Another day for comparing
+		 * @return Return true if have same hours structure
+		 */
 		public boolean compare(HourPerDay anotherDay) {
 			boolean result = true;
 			for (int i = 0; i < 24 && result; i++) {
@@ -94,6 +134,7 @@ public class TimeOption {
 			return result;
 		}
 
+		/** Print the opening hours of this day in pretty format */
 		public void print(String startDay) {
 			if (startDay.equals(this.weekday)) {
 				System.out.println(this.weekday);
@@ -103,6 +144,7 @@ public class TimeOption {
 			this.printReadableHours();
 		}
 
+		/** Print the opening hours by convert stored type to readable string */
 		public void printReadableHours() {
 			boolean isClosed = true;
 			String startHourReadable, endHourReadable;
@@ -126,6 +168,10 @@ public class TimeOption {
 			System.out.println();
 		}
 
+		/**
+		 * Feeding new shift hours to current day
+		 * @param shift a set of shift hours
+		 */
 		public void feedShift(Shift shift) {
 			int startHour = HourUtils.getHourTimeFromReadable(shift.startHour);
 			int endHour = HourUtils.getHourTimeFromReadable(shift.endHour);
@@ -143,8 +189,20 @@ public class TimeOption {
 		}
 	}
 
+	/**
+	 * Utility class for convert 12 hours time to 24 hours time
+	 * and vice versa
+	 *
+	 * @author  Tien Tan
+	 * @since   2017-06-18
+	 */
 	public static class HourUtils {
 
+		/**
+		 * Convert 12 hours type to 24 hours type
+		 * EX: 2PM -> 14
+		 * @param middayTypeHour 12 hours type string
+		 */
 		public static int getHourTimeFromReadable(String middayTypeHour) {
 			String suffix = middayTypeHour.substring(middayTypeHour.length() - 2);
 			String hourString = middayTypeHour.substring(0, middayTypeHour.length() - 2);
@@ -160,6 +218,11 @@ public class TimeOption {
 			return hourTime;
 		}
 
+		/**
+		 * Convert 24 hours type to 12 hours type
+		 * EX: 14 -> 2PM
+		 * @param hourTime 24 hours type
+		 */
 		public static String getReadableHourTime(int hourTime) {
 			String suffix = hourTime < 12 ? "AM" : "PM";
 			Integer middayTypeHour = hourTime % 12;

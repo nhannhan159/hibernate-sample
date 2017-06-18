@@ -40,6 +40,7 @@ public class CityWeather {
 	@Embedded
 	private Clouds clouds;
 
+	private String displayName;
 	private String base;
 	private Integer dt;
 	private Integer cod;
@@ -48,6 +49,7 @@ public class CityWeather {
 		City city = new City();
 		city.setName(this.getName());
 		this.setCity(city);
+		this.setDisplayName(this.getName());
 		for (Weather weather : this.getWeather()) {
 			weather.setCityWeather(this);
 		}
@@ -143,5 +145,13 @@ public class CityWeather {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getDisplayName() {
+		return displayName;
+	}
+
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
 	}
 }
