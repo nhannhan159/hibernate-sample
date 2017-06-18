@@ -1,65 +1,63 @@
 package com.oddle.app.model;
 
 import javax.persistence.Embeddable;
-import java.util.HashMap;
-import java.util.Map;
 
 @Embeddable
 public class Sys {
 
-    private Integer type;
-    private Integer id;
-    private Double message;
-    private String country;
-    private Integer sunrise;
-    private Integer sunset;
+	private Integer type;
+	private Integer id;
+	private Double message;
+	private String country;
+	private Integer sunrise;
+	private Integer sunset;
 
-    public Integer getType() {
-        return type;
-    }
+	public Integer getType() {
+		return type;
+	}
 
-    public void setType(Integer type) {
-        this.type = type;
-    }
+	public void setType(Integer type) {
+		this.type = type;
+	}
 
-    public Integer getId() {
-        return id;
-    }
+	public Integer getId() {
+		return id;
+	}
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public Double getMessage() {
-        return message;
-    }
+	public Double getMessage() {
+		return message;
+	}
 
-    public void setMessage(Double message) {
-        this.message = message;
-    }
+	public void setMessage(Double message) {
+		this.message = message;
+	}
 
-    public String getCountry() {
-        return country;
-    }
+	public String getCountry() {
+		return country;
+	}
 
-    public void setCountry(String country) {
-        this.country = country;
-    }
+	public void setCountry(String country) {
+		this.country = country;
+	}
 
-    public Integer getSunrise() {
-        return sunrise;
-    }
+	public Integer getSunrise() {
+		return sunrise;
+	}
 
-    public void setSunrise(Integer sunrise) {
-        this.sunrise = sunrise;
-    }
+	public void setSunrise(Integer sunrise) {
+		this.sunrise = sunrise;
+	}
 
-    public Integer getSunset() {
-        return sunset;
-    }
+	public Integer getSunset() {
+		return sunset;
+	}
 
-    public void setSunset(Integer sunset) {
-        this.sunset = sunset;
-    }
+	public void setSunset(Integer sunset) {
+		this.sunset = sunset;
+	}
 
 }

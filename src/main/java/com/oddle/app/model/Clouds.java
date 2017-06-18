@@ -5,13 +5,13 @@ import javax.persistence.Embeddable;
 @Embeddable
 public class Clouds {
 
-    private Integer allc;
+	private Integer allc;
 
-    public Integer getAllc() {
-        return allc;
-    }
+	public Integer getAllc() {
+		return allc;
+	}
 
-    public void setAllc(Integer allc) {
+	public void setAllc(Integer allc) {
         this.allc = allc;
     }
 

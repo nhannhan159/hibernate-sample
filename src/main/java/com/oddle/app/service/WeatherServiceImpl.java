@@ -22,7 +22,7 @@ public class WeatherServiceImpl implements WeatherService {
 	private CityWeatherRepository cityWeatherRepository;
 
 	@Override
-	public City saveCity(String cityName) throws Exception {
+	public City addCity(String cityName) throws Exception {
 		return this.cityRepository.save(cityName);
 	}
 

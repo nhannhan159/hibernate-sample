@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface WeatherService {
 
-	City saveCity(String cityName) throws Exception;
+	City addCity(String cityName) throws Exception;
 
 	List<City> getCities() throws Exception;
 

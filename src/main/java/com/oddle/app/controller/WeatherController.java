@@ -2,15 +2,13 @@ package com.oddle.app.controller;
 
 import com.oddle.app.model.City;
 import com.oddle.app.model.CityWeather;
+import com.oddle.app.service.WeatherService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.oddle.app.service.WeatherService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,6 +37,20 @@ public class WeatherController {
 		try {
 			List<City> cities = this.weatherService.getCities();
 			responseEntity = ResponseEntity.ok(cities);
+		} catch (Exception e) {
+			logger.error("Error: ", e);
+			responseEntity = new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return responseEntity;
+	}
+
+	@RequestMapping(value = { "/cities/{name}" }, method = RequestMethod.POST)
+	@ResponseBody
+	public ResponseEntity addCity(@PathVariable String name) {
+		ResponseEntity responseEntity;
+		try {
+			City city = this.weatherService.addCity(name);
+			responseEntity = new ResponseEntity<>(city, HttpStatus.CREATED);
 		} catch (Exception e) {
 			logger.error("Error: ", e);
 			responseEntity = new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);

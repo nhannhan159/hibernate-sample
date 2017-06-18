@@ -1,12 +1,14 @@
 package com.oddle.app.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Table(name = "city_weather")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class CityWeather {
 
 	@Id
@@ -14,7 +16,6 @@ public class CityWeather {
 
 	@Transient
 	private String name;
-
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "name", nullable = false)

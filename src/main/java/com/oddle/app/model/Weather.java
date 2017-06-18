@@ -1,16 +1,18 @@
 package com.oddle.app.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "weather")
-public class Weather {
+public class Weather  implements Serializable {
 
 	@Id
 	private Integer id;
 
+	@Id
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "weather_id", nullable = false)
 	private CityWeather cityWeather;
@@ -54,4 +56,5 @@ public class Weather {
 	public void setCityWeather(CityWeather cityWeather) {
 		this.cityWeather = cityWeather;
 	}
+
 }
