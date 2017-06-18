@@ -6,6 +6,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+/**
+ * Index controller
+ *
+ * @author  Tien Tan
+ * @since   2017-06-18
+ */
 @Controller
 @RequestMapping("/")
 public class IndexController {

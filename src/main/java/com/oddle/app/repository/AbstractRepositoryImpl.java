@@ -16,19 +16,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Abstract repository implement
+ *
+ * @author  Tien Tan
+ * @since   2017-06-18
+ */
 @Repository
 public abstract class AbstractRepositoryImpl<E, K extends Serializable> implements AbstractRepository<E, K> {
 
 	protected final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	@Autowired
-	private SessionFactory sessionFactory;
+	protected SessionFactory sessionFactory;
 
 	protected Class<? extends E> repositoryClazz;
-
-	protected Session openSession() {
-		return sessionFactory.openSession();
-	}
 
 	@SuppressWarnings("unchecked")
 	public AbstractRepositoryImpl() {
@@ -39,7 +41,7 @@ public abstract class AbstractRepositoryImpl<E, K extends Serializable> implemen
 	@Override
 	public Optional<E> get(K id) throws Exception {
 		Optional<E> entity;
-		Session session = this.openSession();
+		Session session = this.sessionFactory.openSession();
 		try {
 			entity = Optional.ofNullable((E) session.get(this.repositoryClazz, id));
 		} catch (Exception e) {
@@ -55,7 +57,7 @@ public abstract class AbstractRepositoryImpl<E, K extends Serializable> implemen
 	@Override
 	public List<E> getAll() throws Exception {
 		List<E> entities;
-		Session session = this.openSession();
+		Session session = this.sessionFactory.openSession();
 		try {
 			entities = session.createCriteria(this.repositoryClazz)
 					.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
@@ -71,7 +73,7 @@ public abstract class AbstractRepositoryImpl<E, K extends Serializable> implemen
 
 	@Override
 	public E saveOrUpdate(E entity) throws Exception {
-		Session session = openSession();
+		Session session = this.sessionFactory.openSession();
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
@@ -92,7 +94,7 @@ public abstract class AbstractRepositoryImpl<E, K extends Serializable> implemen
 
 	@Override
 	public void delete(E entity) throws Exception {
-		Session session = openSession();
+		Session session = this.sessionFactory.openSession();
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();
@@ -113,7 +115,7 @@ public abstract class AbstractRepositoryImpl<E, K extends Serializable> implemen
 	@SuppressWarnings("unchecked")
 	@Override
 	public void deleteByKey(K key) throws Exception {
-		Session session = openSession();
+		Session session = this.sessionFactory.openSession();
 		Transaction transaction = null;
 		try {
 			transaction = session.beginTransaction();

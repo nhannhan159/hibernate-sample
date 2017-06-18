@@ -4,6 +4,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.Embeddable;
 
+/**
+ * Main entity
+ *
+ * @author  Tien Tan
+ * @since   2017-06-18
+ */
 @Embeddable
 public class Main {
 

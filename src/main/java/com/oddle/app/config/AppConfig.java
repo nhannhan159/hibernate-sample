@@ -10,6 +10,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
+/**
+ * Spring MVC and view config
+ *
+ * @author  Tien Tan
+ * @since   2017-06-18
+ */
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = "com.oddle.app")

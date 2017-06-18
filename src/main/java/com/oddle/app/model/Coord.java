@@ -2,6 +2,12 @@ package com.oddle.app.model;
 
 import javax.persistence.Embeddable;
 
+/**
+ * Coord entity
+ *
+ * @author  Tien Tan
+ * @since   2017-06-18
+ */
 @Embeddable
 public class Coord {
 

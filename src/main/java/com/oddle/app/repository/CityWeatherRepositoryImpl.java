@@ -1,16 +1,19 @@
 package com.oddle.app.repository;
 
-import com.oddle.app.model.City;
 import com.oddle.app.model.CityWeather;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * CityWeather repository implement
+ *
+ * @author  Tien Tan
+ * @since   2017-06-18
+ */
 @Repository
 public class CityWeatherRepositoryImpl extends AbstractRepositoryImpl<CityWeather, Integer> implements CityWeatherRepository {
 
@@ -18,7 +21,7 @@ public class CityWeatherRepositoryImpl extends AbstractRepositoryImpl<CityWeathe
 	@Override
 	public List<CityWeather> getByCityName(String cityName) throws Exception {
 		List<CityWeather> cityWeathers;
-		Session session = this.openSession();
+		Session session = this.sessionFactory.openSession();
 		try {
 			cityWeathers = session.createCriteria(this.repositoryClazz)
 					.add(Restrictions.eq("city.name", cityName))

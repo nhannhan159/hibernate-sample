@@ -13,6 +13,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Weather app rest controller
+ *
+ * @author  Tien Tan
+ * @since   2017-06-18
+ */
 @RestController
 @RequestMapping("/api")
 public class WeatherController {

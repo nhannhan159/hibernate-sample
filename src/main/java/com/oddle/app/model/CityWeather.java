@@ -6,6 +6,12 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * CityWeather entity
+ *
+ * @author  Tien Tan
+ * @since   2017-06-18
+ */
 @Entity
 @Table(name = "city_weather")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})

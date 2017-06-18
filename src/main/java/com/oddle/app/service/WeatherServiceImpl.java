@@ -9,6 +9,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Weather service implement
+ *
+ * @author  Tien Tan
+ * @since   2017-06-18
+ */
 @Service
 public class WeatherServiceImpl implements WeatherService {
 

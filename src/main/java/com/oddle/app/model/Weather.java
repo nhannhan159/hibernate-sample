@@ -1,10 +1,14 @@
 package com.oddle.app.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import javax.persistence.*;
 import java.io.Serializable;
 
+/**
+ * Weather entity
+ *
+ * @author  Tien Tan
+ * @since   2017-06-18
+ */
 @Entity
 @Table(name = "weather")
 public class Weather  implements Serializable {

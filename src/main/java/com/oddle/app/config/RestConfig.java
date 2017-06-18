@@ -12,6 +12,12 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Spring rest config
+ *
+ * @author  Tien Tan
+ * @since   2017-06-18
+ */
 @Configuration
 public class RestConfig {
 

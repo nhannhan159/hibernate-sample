@@ -8,6 +8,12 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 
+/**
+ * Spring servlet initialize
+ *
+ * @author  Tien Tan
+ * @since   2017-06-18
+ */
 public class AppInitializer implements WebApplicationInitializer {
 	public void onStartup(ServletContext container) throws ServletException {
 

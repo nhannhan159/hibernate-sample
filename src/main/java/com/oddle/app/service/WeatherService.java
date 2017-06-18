@@ -5,6 +5,12 @@ import com.oddle.app.model.CityWeather;
 
 import java.util.List;
 
+/**
+ * Weather service interface
+ *
+ * @author  Tien Tan
+ * @since   2017-06-18
+ */
 public interface WeatherService {
 
 	City addCity(String cityName) throws Exception;
