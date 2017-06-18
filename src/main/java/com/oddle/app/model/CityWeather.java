@@ -2,128 +2,145 @@ package com.oddle.app.model;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
-@Table(name = "cityweather")
+@Table(name = "city_weather")
 public class CityWeather {
 
-    @Id
-    private Integer id;
+	@Id
+	private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "name", nullable = false)
-    private City city;
+	@Transient
+	private String name;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "cityWeather", cascade = CascadeType.ALL)
-    private List<Weather> weather;
 
-    @Embedded
-    private Coord coord;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "name", nullable = false)
+	private City city;
 
-    @Embedded
-    @AttributeOverride(name = "id", column = @Column(name = "sysid"))
-    private Sys sys;
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "cityWeather", cascade = CascadeType.ALL)
+	private List<Weather> weather;
 
-    @Embedded
-    private Main main;
+	@Embedded
+	private Coord coord;
 
-    @Embedded
-    private Wind wind;
+	@Embedded
+	@AttributeOverride(name = "id", column = @Column(name = "sysid"))
+	private Sys sys;
 
-    @Embedded
-    private Clouds clouds;
+	@Embedded
+	private Main main;
 
-    private String base;
-    private Integer dt;
-    private Integer cod;
+	@Embedded
+	private Wind wind;
 
-    public Coord getCoord() {
-        return coord;
-    }
+	@Embedded
+	private Clouds clouds;
 
-    public void setCoord(Coord coord) {
-        this.coord = coord;
-    }
+	private String base;
+	private Integer dt;
+	private Integer cod;
 
-    public Sys getSys() {
-        return sys;
-    }
+	public void dto2Entity() {
+		City city = new City();
+		city.setName(this.getName());
+		this.setCity(city);
+		for (Weather weather : this.getWeather()) {
+			weather.setCityWeather(this);
+		}
+	}
 
-    public void setSys(Sys sys) {
-        this.sys = sys;
-    }
+	public Coord getCoord() {
+		return coord;
+	}
 
-    public List<Weather> getWeather() {
-        return weather;
-    }
+	public void setCoord(Coord coord) {
+		this.coord = coord;
+	}
 
-    public void setWeather(List<Weather> weather) {
-        this.weather = weather;
-    }
+	public Sys getSys() {
+		return sys;
+	}
 
-    public String getBase() {
-        return base;
-    }
+	public void setSys(Sys sys) {
+		this.sys = sys;
+	}
 
-    public void setBase(String base) {
-        this.base = base;
-    }
+	public List<Weather> getWeather() {
+		return weather;
+	}
 
-    public Main getMain() {
-        return main;
-    }
+	public void setWeather(List<Weather> weather) {
+		this.weather = weather;
+	}
 
-    public void setMain(Main main) {
-        this.main = main;
-    }
+	public String getBase() {
+		return base;
+	}
 
-    public Wind getWind() {
-        return wind;
-    }
+	public void setBase(String base) {
+		this.base = base;
+	}
 
-    public void setWind(Wind wind) {
-        this.wind = wind;
-    }
+	public Main getMain() {
+		return main;
+	}
 
-    public Clouds getClouds() {
-        return clouds;
-    }
+	public void setMain(Main main) {
+		this.main = main;
+	}
 
-    public void setClouds(Clouds clouds) {
-        this.clouds = clouds;
-    }
+	public Wind getWind() {
+		return wind;
+	}
 
-    public Integer getDt() {
-        return dt;
-    }
+	public void setWind(Wind wind) {
+		this.wind = wind;
+	}
 
-    public void setDt(Integer dt) {
-        this.dt = dt;
-    }
+	public Clouds getClouds() {
+		return clouds;
+	}
 
-    public Integer getId() {
-        return id;
-    }
+	public void setClouds(Clouds clouds) {
+		this.clouds = clouds;
+	}
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public Integer getDt() {
+		return dt;
+	}
 
-    public City getCity() {
-        return city;
-    }
+	public void setDt(Integer dt) {
+		this.dt = dt;
+	}
 
-    public void setCity(City city) {
-        this.city = city;
-    }
+	public Integer getId() {
+		return id;
+	}
 
-    public Integer getCod() {
-        return cod;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public void setCod(Integer cod) {
-        this.cod = cod;
-    }
+	public void setCity(City city) {
+		this.city = city;
+	}
 
+	public Integer getCod() {
+		return cod;
+	}
+
+	public void setCod(Integer cod) {
+		this.cod = cod;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 }

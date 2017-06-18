@@ -5,12 +5,8 @@ import com.oddle.app.model.CityWeather;
 import com.oddle.app.repository.CityRepository;
 import com.oddle.app.repository.CityWeatherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -26,13 +22,13 @@ public class WeatherServiceImpl implements WeatherService {
 	private CityWeatherRepository cityWeatherRepository;
 
 	@Override
-	public City saveCity(City city) throws Exception {
-		return this.cityRepository.save(city);
+	public City saveCity(String cityName) throws Exception {
+		return this.cityRepository.save(cityName);
 	}
 
 	@Override
-	public void deleteCity(City city) throws Exception {
-		this.cityRepository.delete(city);
+	public void deleteCity(String cityName) throws Exception {
+		this.cityRepository.deleteByKey(cityName);
 	}
 
 	@Override
@@ -41,27 +37,28 @@ public class WeatherServiceImpl implements WeatherService {
 	}
 
 	@Override
-	public List<CityWeather> getCityWeathers() throws Exception {
+	public CityWeather fetchAndSaveCityWeather(String cityName) throws Exception {
+		CityWeather cityWeather = this.remoteWeatherService.fetchCityWeather(cityName);
+		return this.cityWeatherRepository.saveOrUpdate(cityWeather);
+	}
+
+	@Override
+	public List<CityWeather> fetchAndGetCityWeathers() throws Exception {
 		List<City> cities = this.cityRepository.getAll();
 		for (City city : cities) {
-			CityWeather cityWeather = this.remoteWeatherService.getCityWeather(city.getName());
-
+			this.fetchAndSaveCityWeather(city.getName());
 		}
-
 		return this.cityWeatherRepository.getAll();
 	}
 
 	@Override
-	public List<CityWeather> getCityWeathers(String city) throws Exception {
-		CityWeather cityWeather = this.remoteWeatherService.getCityWeather(city);
-//		List<CityWeather> cityWeathers = this.cityWeatherRepository.getByCityName(city);
-		List<CityWeather> cityWeathers = new ArrayList<>();
-		cityWeathers.add(cityWeather);
-		return cityWeathers;
+	public List<CityWeather> fetchAndGetCityWeathers(String cityName) throws Exception {
+		this.fetchAndSaveCityWeather(cityName);
+		return this.cityWeatherRepository.getByCityName(cityName);
 	}
 
 	@Override
-	public void removeCityWeather(CityWeather cityWeather) throws Exception {
-		this.cityWeatherRepository.delete(cityWeather);
+	public void deleteCityWeather(Integer cityWeatherId) throws Exception {
+		this.cityWeatherRepository.deleteByKey(cityWeatherId);
 	}
 }

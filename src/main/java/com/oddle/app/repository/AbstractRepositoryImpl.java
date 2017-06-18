@@ -1,62 +1,133 @@
 package com.oddle.app.repository;
 
-import com.oddle.app.model.City;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.io.Serializable;
+import java.lang.reflect.ParameterizedType;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
 public abstract class AbstractRepositoryImpl<E, K extends Serializable> implements AbstractRepository<E, K> {
 
-	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+	protected final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
 	@Autowired
 	private SessionFactory sessionFactory;
 
 	protected Class<? extends E> repositoryClazz;
 
-	protected Session getCurrentSession(){
-		return this.sessionFactory.getCurrentSession();
+	protected Session openSession() {
+		return sessionFactory.openSession();
+	}
+
+	@SuppressWarnings("unchecked")
+	public AbstractRepositoryImpl() {
+		this.repositoryClazz = (Class<? extends E>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public Optional<E> get(K id) throws Exception {
-		Session session = this.getCurrentSession();
-		return Optional.ofNullable((E) session.get(this.repositoryClazz, id));
+		Optional<E> entity;
+		Session session = this.openSession();
+		try {
+			entity = Optional.ofNullable((E) session.get(this.repositoryClazz, id));
+		} catch (Exception e) {
+			logger.error("Get error: ", e);
+			throw e;
+		} finally {
+			session.close();
+		}
+		return entity;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<E> getAll() throws Exception {
-		Session session = this.getCurrentSession();
-		return session.createCriteria(this.repositoryClazz).list();
+		List<E> entities;
+		Session session = this.openSession();
+		try {
+			entities = session.createCriteria(this.repositoryClazz)
+					.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY)
+					.list();
+		} catch (Exception e) {
+			logger.error("Get error: ", e);
+			throw e;
+		} finally {
+			session.close();
+		}
+		return entities;
 	}
 
 	@Override
-	public E save(E entity) throws Exception {
-		Session session = this.getCurrentSession();
-		session.persist(entity);
-		return entity;
-	}
-
-	@Override
-	public E update(E entity) throws Exception {
-		Session session = this.getCurrentSession();
-		session.update(entity);
+	public E saveOrUpdate(E entity) throws Exception {
+		Session session = openSession();
+		Transaction transaction = null;
+		try {
+			transaction = session.beginTransaction();
+			session.saveOrUpdate(entity);
+			session.flush();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			if (transaction != null) {
+				transaction.rollback();
+			}
+			logger.error("Persist error: ", e);
+			throw e;
+		} finally {
+			session.close();
+		}
 		return entity;
 	}
 
 	@Override
 	public void delete(E entity) throws Exception {
-		Session session = this.getCurrentSession();
-		session.delete(entity);
+		Session session = openSession();
+		Transaction transaction = null;
+		try {
+			transaction = session.beginTransaction();
+			session.delete(entity);
+			session.flush();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			if (transaction != null) {
+				transaction.rollback();
+			}
+			logger.error("Delete error: ", e);
+			throw e;
+		} finally {
+			session.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public void deleteByKey(K key) throws Exception {
+		Session session = openSession();
+		Transaction transaction = null;
+		try {
+			transaction = session.beginTransaction();
+			E entity = (E) session.load(this.repositoryClazz, key);
+			session.delete(entity);
+			session.flush();
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			if (transaction != null) {
+				transaction.rollback();
+			}
+			logger.error("Delete error: ", e);
+			throw e;
+		} finally {
+			session.close();
+		}
 	}
 }

@@ -7,15 +7,17 @@ import java.util.List;
 
 public interface WeatherService {
 
-	City saveCity(City city) throws Exception;
-
-	void deleteCity(City city) throws Exception;
+	City saveCity(String cityName) throws Exception;
 
 	List<City> getCities() throws Exception;
 
-	List<CityWeather> getCityWeathers() throws Exception;
+	void deleteCity(String cityName) throws Exception;
 
-	List<CityWeather> getCityWeathers(String city) throws Exception;
+	CityWeather fetchAndSaveCityWeather(String cityName) throws Exception;
 
-	void removeCityWeather(CityWeather cityWeather) throws Exception;
+	List<CityWeather> fetchAndGetCityWeathers() throws Exception;
+
+	List<CityWeather> fetchAndGetCityWeathers(String city) throws Exception;
+
+	void deleteCityWeather(Integer cityWeatherId) throws Exception;
 }

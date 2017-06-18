@@ -4,6 +4,6 @@ import com.oddle.app.model.CityWeather;
 
 public interface RemoteWeatherService {
 
-	CityWeather getCityWeather(String city) throws Exception;
+	CityWeather fetchCityWeather(String city) throws Exception;
 
 }

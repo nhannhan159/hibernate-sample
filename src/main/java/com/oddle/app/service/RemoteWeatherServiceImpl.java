@@ -4,6 +4,8 @@ import com.oddle.app.model.City;
 import com.oddle.app.model.CityWeather;
 import com.oddle.app.repository.CityRepository;
 import com.oddle.app.repository.CityWeatherRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -19,6 +21,8 @@ import java.util.Map;
 @PropertySource(value = { "classpath:application.properties" })
 public class RemoteWeatherServiceImpl implements RemoteWeatherService {
 
+	private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
+
 	@Value("${openweather.api}")
 	private String openweatherApi;
 
@@ -29,10 +33,18 @@ public class RemoteWeatherServiceImpl implements RemoteWeatherService {
 	private RestTemplate restTemplate;
 
 	@Override
-	public CityWeather getCityWeather(String city) throws Exception {
+	public CityWeather fetchCityWeather(String city) throws Exception {
 		Map<String, String> params = new HashMap<>();
-		params.put("q", city);
-		params.put("appid", openweatherAppid);
-		return this.restTemplate.getForObject(openweatherApi, CityWeather.class, params);
+		params.put("cityName", city);
+		params.put("appId", openweatherAppid);
+		CityWeather cityWeather;
+		try {
+			cityWeather = this.restTemplate.getForObject(openweatherApi, CityWeather.class, params);
+			cityWeather.dto2Entity();
+		} catch (Exception e) {
+			logger.error("Fetch error: ", e);
+			throw e;
+		}
+		return cityWeather;
 	}
 }

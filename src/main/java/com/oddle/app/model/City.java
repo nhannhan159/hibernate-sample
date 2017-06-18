@@ -1,5 +1,7 @@
 package com.oddle.app.model;
 
+import org.omg.CORBA.PUBLIC_MEMBER;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.HashMap;
