@@ -11,6 +11,7 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 
@@ -18,6 +19,7 @@ import javax.sql.DataSource;
  * @author tien.tan
  */
 @Configuration
+@EnableTransactionManagement
 @EnableJpaRepositories(
     entityManagerFactoryRef = "mainEntityManagerFactory",
     transactionManagerRef = "mainTransactionManager",
@@ -44,6 +46,7 @@ public class RepositoryConfig {
         factoryBean.setJpaPropertyMap(properties.getProperties());
         return factoryBean;
     }
+
     @Bean
     @Primary
     public DataSource mainDataSource(DataSourceProperties properties) {
