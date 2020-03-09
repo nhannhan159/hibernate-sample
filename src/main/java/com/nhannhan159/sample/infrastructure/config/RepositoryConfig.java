@@ -40,7 +40,7 @@ public class RepositoryConfig {
                                                                            JpaProperties properties,
                                                                            DataSource dataSource) {
         var factoryBean = new LocalContainerEntityManagerFactoryBean();
-        factoryBean.setPackagesToScan("com.nhannhan159.app.model");
+        factoryBean.setPackagesToScan("com.nhannhan159.sample.infrastructure.entity");
         factoryBean.setDataSource(dataSource);
         factoryBean.setJpaVendorAdapter(vendorAdapter);
         factoryBean.setJpaPropertyMap(properties.getProperties());

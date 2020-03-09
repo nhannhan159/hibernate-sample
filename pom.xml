@@ -11,24 +11,19 @@
 
     <groupId>com.nhannhan159.app</groupId>
     <artifactId>hibernate-sample</artifactId>
-    <packaging>pom</packaging>
     <version>1.0.0-SNAPSHOT</version>
     <name>hibernate-sample</name>
 
     <properties>
         <java.version>11</java.version>
-        <project.version>1.0.0-SNAPSHOT</project.version>
-        <project-common.version>1.0.0-SNAPSHOT</project-common.version>
-        <project-openweather.version>1.0.0-SNAPSHOT</project-openweather.version>
         <mockito-all.version>1.10.19</mockito-all.version>
-        <swagger.version>2.9.2</swagger.version>
         <mapstruct.version>1.3.0.Final</mapstruct.version>
-        <ddd-base.version>1.1.1</ddd-base.version>
         <retrofit.version>2.7.1</retrofit.version>
         <okhttp-logging.version>4.4.0</okhttp-logging.version>
         <guava.version>28.2-jre</guava.version>
         <lombok.version>1.18.4</lombok.version>
         <ttl.version>2.11.4</ttl.version>
+        <kotlin.version>1.2.71</kotlin.version>
         <spring-cloud.version>Hoxton.SR3</spring-cloud.version>
     </properties>
 
@@ -48,10 +43,6 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-autoconfigure</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <scope>compile</scope>
             <optional>true</optional>
@@ -62,14 +53,29 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-jcache</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib</artifactId>
+            <version>${kotlin.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-runtime</artifactId>
+            <version>${kotlin.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.linux-china</groupId>
-            <artifactId>ddd-base</artifactId>
-            <version>${ddd-base.version}</version>
         </dependency>
         <dependency>
             <groupId>com.squareup.retrofit2</groupId>
@@ -148,11 +154,4 @@
             </plugin>
         </plugins>
     </build>
-
-    <repositories>
-        <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
-    </repositories>
 </project>

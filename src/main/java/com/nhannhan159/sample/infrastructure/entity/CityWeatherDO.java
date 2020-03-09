@@ -3,6 +3,9 @@ package com.nhannhan159.sample.infrastructure.entity;
 import com.nhannhan159.sample.infrastructure.entity.embedded.*;
 import lombok.Data;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -12,6 +15,7 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "city_weather")
+@Cache(region = "cityWeatherCache", usage = CacheConcurrencyStrategy.READ_ONLY)
 public class CityWeatherDO {
 
     @Id

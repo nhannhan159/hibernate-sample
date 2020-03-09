@@ -61,7 +61,7 @@ public class RetrofitConfig {
         var builder = new OkHttpClient.Builder()
             .connectTimeout(this.retrofitProperties.getConnectTimeout(), TimeUnit.SECONDS);
         interceptors.forEach(builder::addInterceptor);
-        interceptors.add(loggingInterceptor);
+        builder.addInterceptor(loggingInterceptor);
         return builder.build();
     }
 
