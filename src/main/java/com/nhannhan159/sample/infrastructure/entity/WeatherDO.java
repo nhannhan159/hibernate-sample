@@ -3,6 +3,7 @@ package com.nhannhan159.sample.infrastructure.entity;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Weather entity
@@ -13,7 +14,7 @@ import javax.persistence.*;
 @Data
 @Entity
 @Table(name = "weather")
-public class WeatherDO {
+public class WeatherDO implements Serializable {
 
     @Id
     @ManyToOne(fetch = FetchType.LAZY)

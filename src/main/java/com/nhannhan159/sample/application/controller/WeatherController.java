@@ -5,7 +5,6 @@ import com.nhannhan159.sample.application.dto.CityWeatherDTO;
 import com.nhannhan159.sample.domain.service.WeatherService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -30,7 +29,7 @@ public class WeatherController {
         return this.weatherService.addCity(name);
     }
 
-    @GetMapping(value = "/cities/{name}")
+    @DeleteMapping(value = "/cities/{name}")
     public Mono<Void> deleteCity(@PathVariable String name) {
         return this.weatherService.deleteCity(name);
     }
