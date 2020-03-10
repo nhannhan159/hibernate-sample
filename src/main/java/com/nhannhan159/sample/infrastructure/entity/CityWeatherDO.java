@@ -26,7 +26,7 @@ public class CityWeatherDO {
     private String cityName;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "city_name", nullable = false)
+    @JoinColumn(name = "cityName", nullable = false)
     private CityDO city;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "cityWeather", cascade = CascadeType.ALL)
