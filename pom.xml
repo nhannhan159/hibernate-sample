@@ -24,6 +24,7 @@
         <lombok.version>1.18.4</lombok.version>
         <ttl.version>2.11.4</ttl.version>
         <kotlin.version>1.2.71</kotlin.version>
+        <springfox.version>3.0.0-SNAPSHOT</springfox.version>
         <spring-cloud.version>Hoxton.SR3</spring-cloud.version>
     </properties>
 
@@ -116,6 +117,26 @@
             <artifactId>mapstruct-processor</artifactId>
             <version>${mapstruct.version}</version>
         </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${springfox.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>${springfox.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-spring-webflux</artifactId>
+            <version>${springfox.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>${springfox.version}</version>
+        </dependency>
         <!-- main deps end -->
 
         <!-- test deps start -->
@@ -149,6 +170,14 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <repositories>
+        <repository>
+            <id>jcenter-snapshots</id>
+            <name>jcenter</name>
+            <url>http://oss.jfrog.org/artifactory/oss-snapshot-local/</url>
+        </repository>
+    </repositories>
 
     <build>
         <plugins>

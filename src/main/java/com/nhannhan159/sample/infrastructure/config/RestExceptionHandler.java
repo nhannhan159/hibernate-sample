@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class RestExceptionHandler {
 
     @ExceptionHandler(Throwable.class)
-    public ResponseEntity<ErrorDTO> handleException(Throwable e) {
+    ResponseEntity<ErrorDTO> handleException(Throwable e) {
         log.error(Throwables.getStackTraceAsString(e));
         return buildResponseEntity(e);
     }
