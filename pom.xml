@@ -22,7 +22,6 @@
         <okhttp-logging.version>4.4.0</okhttp-logging.version>
         <guava.version>28.2-jre</guava.version>
         <lombok.version>1.18.4</lombok.version>
-        <ttl.version>2.11.4</ttl.version>
         <kotlin.version>1.2.71</kotlin.version>
         <springfox.version>3.0.0-SNAPSHOT</springfox.version>
         <spring-cloud.version>Hoxton.SR3</spring-cloud.version>
@@ -101,11 +100,6 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>transmittable-thread-local</artifactId>
-            <version>${ttl.version}</version>
         </dependency>
         <dependency>
             <groupId>org.mapstruct</groupId>
