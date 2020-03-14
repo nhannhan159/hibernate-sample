@@ -1,16 +1,15 @@
 package com.nhannhan159.sample.infrastructure.config;
 
 import com.alibaba.ttl.threadpool.TtlExecutors;
-import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.scheduling.annotation.AsyncConfigurer;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * @author tien.tan
@@ -18,24 +17,29 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 @Configuration
 @EnableConfigurationProperties(ExecutorConfigProperties.class)
-public class ExecutorConfig {
-
+public class ExecutorConfig implements AsyncConfigurer {
     private final ExecutorConfigProperties properties;
 
-    @Bean
-    public ThreadPoolExecutor threadPoolExecutor() {
-        return new ThreadPoolExecutor(
-            properties.getCorePoolSize(),
-            properties.getMaximumPoolSize(),
-            properties.getKeepAliveTime(),
-            TimeUnit.SECONDS,
-            new LinkedBlockingQueue<>(properties.getMaxQueueSize()),
-            new ThreadFactoryBuilder().setNameFormat("logistics-pm-thread-%d").build());
+    @Override
+    public Executor getAsyncExecutor() {
+        return simpleThreadPoolTaskExecutor();
     }
 
     @Bean
-    public ExecutorService executorService() {
-        return TtlExecutors.getTtlExecutorService(threadPoolExecutor());
+    @Primary
+    Executor simpleThreadPoolTaskExecutor() {
+        var taskExecutor = new ThreadPoolTaskExecutor();
+        taskExecutor.setCorePoolSize(properties.getCorePoolSize());
+        taskExecutor.setMaxPoolSize(properties.getMaximumPoolSize());
+        taskExecutor.setKeepAliveSeconds(properties.getKeepAliveTime());
+        taskExecutor.setQueueCapacity(properties.getMaxQueueSize());
+        taskExecutor.setThreadNamePrefix(properties.getThreadNamePrefix());
+        taskExecutor.setWaitForTasksToCompleteOnShutdown(properties.isWaitForTasksToCompleteOnShutdown());
+        taskExecutor.setAwaitTerminationSeconds(properties.getAwaitTermination());
+        // 线程池对拒绝任务的处理策略
+        taskExecutor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
+        // 初始化
+        taskExecutor.initialize();
+        return TtlExecutors.getTtlExecutor(taskExecutor);
     }
-
 }
