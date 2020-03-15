@@ -18,8 +18,6 @@ import reactor.core.publisher.Mono;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
-import java.util.Objects;
 
 /**
  * @author tien.tan
@@ -37,20 +35,18 @@ public class HttpWeatherService implements WeatherService {
 
     @Override
     public Mono<CityDTO> addCity(String cityName) {
-        return Mono
-            .just(this.cityRepository.save(new CityDO().setName(cityName)))
+        return this.cityRepository.save(new CityDO().setName(cityName))
             .map(this.cityDtoConverter::convertBack);
     }
 
     @Override
     public Mono<Void> deleteCity(String cityName) {
-        return Mono.fromRunnable(() -> this.cityRepository.delete(new CityDO().setName(cityName)));
+        return this.cityRepository.delete(new CityDO().setName(cityName));
     }
 
     @Override
     public Flux<CityDTO> getCities() {
-        return Flux
-            .fromIterable(this.cityRepository.findAll())
+        return this.cityRepository.findAll()
             .map(this.cityDtoConverter::convertBack);
     }
 
@@ -81,14 +77,12 @@ public class HttpWeatherService implements WeatherService {
     }
 
     private Mono<CityWeatherDTO> getCityWeatherFromDb(String cityName, String ds) {
-        return Mono
-            .just(this.cityWeatherRepository.findByCityNameIsLikeAndDs(cityName, ds))
+        return this.cityWeatherRepository.findByCityNameIsLikeAndDs(cityName, ds)
             .map(this.cityWeatherDtoConverter::convertBack);
     }
 
     private Flux<CityWeatherDTO> getCityWeatherFromDb(String cityName) {
-        return Flux
-            .fromIterable(this.cityWeatherRepository.findByCityNameIsLikeOrderByDsDesc(cityName))
+        return this.cityWeatherRepository.findByCityNameIsLikeOrderByDsDesc(cityName)
             .map(this.cityWeatherDtoConverter::convertBack);
     }
 
