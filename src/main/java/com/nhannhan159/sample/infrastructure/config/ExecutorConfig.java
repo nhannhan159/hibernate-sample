@@ -32,7 +32,7 @@ public class ExecutorConfig extends AsyncConfigurerSupport implements Scheduling
 
     @Override
     public Executor getAsyncExecutor() {
-        return simpleThreadPoolTaskExecutor(beanFactory, properties);
+        return simpleThreadPoolTaskExecutor();
     }
 
     @Override
@@ -42,12 +42,12 @@ public class ExecutorConfig extends AsyncConfigurerSupport implements Scheduling
 
     @Override
     public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
-        taskRegistrar.setScheduler(schedulingExecutor(properties));
+        taskRegistrar.setScheduler(schedulingExecutor());
     }
 
     @Bean
     @Primary
-    Executor simpleThreadPoolTaskExecutor(BeanFactory beanFactory, ExecutorConfigProperties properties) {
+    Executor simpleThreadPoolTaskExecutor() {
         var taskExecutor = new ThreadPoolTaskExecutor();
         taskExecutor.setCorePoolSize(properties.getCorePoolSize());
         taskExecutor.setMaxPoolSize(properties.getMaximumPoolSize());
@@ -64,7 +64,7 @@ public class ExecutorConfig extends AsyncConfigurerSupport implements Scheduling
     }
 
     @Bean(destroyMethod = "shutdown")
-    Executor schedulingExecutor(ExecutorConfigProperties properties) {
+    Executor schedulingExecutor() {
         return Executors.newScheduledThreadPool(properties.getCorePoolSize());
     }
 }
