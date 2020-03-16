@@ -6,6 +6,7 @@ import lombok.experimental.Accessors;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.domain.AbstractAggregateRoot;
+import org.springframework.data.relational.core.mapping.Table;
 
 import javax.persistence.*;
 import java.util.List;
@@ -17,7 +18,7 @@ import java.util.List;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "city")
+@Table("city")
 @Cache(region = "cityCache", usage = CacheConcurrencyStrategy.READ_ONLY)
 public class CityDO extends AbstractAggregateRoot<CityDO> {
 
