@@ -1,19 +1,17 @@
 package com.nhannhan159.sample.infrastructure.entity;
 
 import lombok.Data;
+import org.springframework.data.relational.core.mapping.Table;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
 /**
- * Weather entity
- *
- * @author  Tien Tan
- * @since   2017-06-18
+ * @author tien.tan
  */
 @Data
 @Entity
-@Table(name = "weather")
+@Table("weather")
 public class WeatherDO implements Serializable {
 
     @Id
