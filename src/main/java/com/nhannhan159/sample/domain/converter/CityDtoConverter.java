@@ -8,6 +8,6 @@ import org.mapstruct.Mapper;
 /**
  * @author tien.tan
  */
-@Mapper(componentModel = "spring", uses = { CityWeatherDtoConverter.class })
+@Mapper(componentModel = "spring")
 public interface CityDtoConverter extends BaseConverter<CityDTO, CityDO> {
 }

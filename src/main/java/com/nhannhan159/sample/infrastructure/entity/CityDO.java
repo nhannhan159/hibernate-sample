@@ -3,13 +3,11 @@ package com.nhannhan159.sample.infrastructure.entity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.domain.AbstractAggregateRoot;
 import org.springframework.data.relational.core.mapping.Table;
 
-import javax.persistence.*;
-import java.util.List;
+import javax.persistence.Entity;
 
 /**
  * @author tien.tan
@@ -17,14 +15,12 @@ import java.util.List;
 @Data
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = true)
-@Entity
 @Table("city")
-@Cache(region = "cityCache", usage = CacheConcurrencyStrategy.READ_ONLY)
+@Entity
+@javax.persistence.Table(name = "city")
 public class CityDO extends AbstractAggregateRoot<CityDO> {
 
     @Id
+    @javax.persistence.Id
     private String name;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "city", cascade = CascadeType.ALL)
-    private List<CityWeatherDO> cityWeathers;
 }
