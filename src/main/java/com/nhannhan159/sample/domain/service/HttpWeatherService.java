@@ -8,8 +8,8 @@ import com.nhannhan159.sample.domain.converter.CityWeatherApiConverter;
 import com.nhannhan159.sample.domain.converter.CityWeatherDtoConverter;
 import com.nhannhan159.sample.infrastructure.entity.CityDO;
 import com.nhannhan159.sample.infrastructure.entity.CityWeatherDO;
-import com.nhannhan159.sample.infrastructure.repository.CityRepository;
-import com.nhannhan159.sample.infrastructure.repository.CityWeatherRepository;
+import com.nhannhan159.sample.infrastructure.repository.jpa.CityWeatherRepository;
+import com.nhannhan159.sample.infrastructure.repository.reactive.ReactiveCityRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,7 +30,7 @@ public class HttpWeatherService implements WeatherService {
     private final CityDtoConverter cityDtoConverter;
     private final CityWeatherDtoConverter cityWeatherDtoConverter;
     private final CityWeatherApiConverter cityWeatherApiConverter;
-    private final CityRepository cityRepository;
+    private final ReactiveCityRepository cityRepository;
     private final CityWeatherRepository cityWeatherRepository;
 
     @Override
@@ -77,12 +77,12 @@ public class HttpWeatherService implements WeatherService {
     }
 
     private Mono<CityWeatherDTO> getCityWeatherFromDb(String cityName, String ds) {
-        return this.cityWeatherRepository.findByCityNameIsLikeAndDs(cityName, ds)
+        return Mono.justOrEmpty(this.cityWeatherRepository.findByCityNameIsLikeAndDs(cityName, ds))
             .map(this.cityWeatherDtoConverter::convertBack);
     }
 
     private Flux<CityWeatherDTO> getCityWeatherFromDb(String cityName) {
-        return this.cityWeatherRepository.findByCityNameIsLikeOrderByDsDesc(cityName)
+        return Flux.fromIterable(this.cityWeatherRepository.findByCityNameIsLikeOrderByDsDesc(cityName))
             .map(this.cityWeatherDtoConverter::convertBack);
     }
 

@@ -5,6 +5,7 @@ import lombok.Data;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.data.domain.AbstractAggregateRoot;
 import org.springframework.data.relational.core.mapping.Table;
 
 import javax.persistence.*;
@@ -17,18 +18,14 @@ import java.util.List;
 @Entity
 @Table("city_weather")
 @Cache(region = "cityWeatherCache", usage = CacheConcurrencyStrategy.READ_ONLY)
-public class CityWeatherDO {
+public class CityWeatherDO extends AbstractAggregateRoot<CityWeatherDO> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(insertable = false, updatable = false)
+    @Column
     private String cityName;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cityName", nullable = false)
-    private CityDO city;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "cityWeather", cascade = CascadeType.ALL)
     private List<WeatherDO> weather;

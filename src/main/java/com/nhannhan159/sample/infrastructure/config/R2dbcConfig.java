@@ -15,7 +15,7 @@ import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
  * @author tien.tan
  */
 @Configuration
-@EnableR2dbcRepositories
+@EnableR2dbcRepositories("com.nhannhan159.sample.infrastructure.repository.reactive")
 @EnableConfigurationProperties(R2dbcExtProperties.class)
 public class R2dbcConfig extends AbstractR2dbcConfiguration {
 
