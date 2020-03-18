@@ -69,8 +69,7 @@ public class HttpWeatherService implements WeatherService {
     }
 
     private Mono<CityWeatherDTO> getCityWeatherFromApi(String cityName) {
-        return Mono
-            .just(this.openWeatherApiService.fetchCityWeather(cityName))
+        return this.openWeatherApiService.fetchCityWeather(cityName)
             .map(this.cityWeatherApiConverter::convert)
             .doOnSuccess(this::saveCityWeatherToDb)
             .map(this.cityWeatherDtoConverter::convertBack);
