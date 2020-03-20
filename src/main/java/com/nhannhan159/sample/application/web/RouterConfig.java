@@ -3,7 +3,6 @@ package com.nhannhan159.sample.application.web;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.server.RouterFunction;
@@ -22,7 +21,7 @@ import static org.springframework.web.reactive.function.server.ServerResponse.ok
 public class RouterConfig {
 
     @Bean
-    RouterFunction<ServerResponse> indexRoutes(@Value("classpath:/web/index.html") final Resource indexHtml) {
+    RouterFunction<ServerResponse> indexRoutes(@Value("classpath:/static/index.html") final Resource indexHtml) {
         return route(GET("/weather"), request -> ok().contentType(MediaType.TEXT_HTML).bodyValue(indexHtml));
     }
 
@@ -33,10 +32,5 @@ public class RouterConfig {
             .andRoute(GET("/cities/{name}"), weatherHandler::addCity)
             .andRoute(DELETE("/cities/{name}"), weatherHandler::deleteCity)
             .andRoute(GET("/cityWeathers"), weatherHandler::getCityWeathers));
-    }
-
-    @Bean
-    RouterFunction<ServerResponse> resourcesRoutes() {
-        return resources("/**", new ClassPathResource("web/"));
     }
 }
