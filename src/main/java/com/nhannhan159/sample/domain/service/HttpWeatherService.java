@@ -10,6 +10,7 @@ import com.nhannhan159.sample.infrastructure.entity.CityDO;
 import com.nhannhan159.sample.infrastructure.entity.CityWeatherDO;
 import com.nhannhan159.sample.infrastructure.repository.jpa.CityWeatherRepository;
 import com.nhannhan159.sample.infrastructure.repository.reactive.ReactiveCityRepository;
+import com.nhannhan159.sample.infrastructure.util.ReactiveWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,7 @@ public class HttpWeatherService implements WeatherService {
     private final CityWeatherApiConverter cityWeatherApiConverter;
     private final ReactiveCityRepository cityRepository;
     private final CityWeatherRepository cityWeatherRepository;
+    private final ReactiveWrapper reactiveWrapper;
 
     @Override
     public Mono<CityDTO> addCity(String cityName) {
@@ -76,12 +78,12 @@ public class HttpWeatherService implements WeatherService {
     }
 
     private Mono<CityWeatherDTO> getCityWeatherFromDb(String cityName, String ds) {
-        return Mono.justOrEmpty(this.cityWeatherRepository.findByCityNameIsLikeAndDs(cityName, ds))
+        return this.reactiveWrapper.toMono(() -> this.cityWeatherRepository.findByCityNameIsLikeAndDs(cityName, ds))
             .map(this.cityWeatherDtoConverter::convertBack);
     }
 
     private Flux<CityWeatherDTO> getCityWeatherFromDb(String cityName) {
-        return Flux.fromIterable(this.cityWeatherRepository.findByCityNameIsLikeOrderByDsDesc(cityName))
+        return this.reactiveWrapper.toFlux(() -> this.cityWeatherRepository.findByCityNameIsLikeOrderByDsDesc(cityName))
             .map(this.cityWeatherDtoConverter::convertBack);
     }
 
