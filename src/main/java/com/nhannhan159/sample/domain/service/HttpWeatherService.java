@@ -66,7 +66,7 @@ public class HttpWeatherService implements WeatherService {
         var weatherTodayFlux = weatherFlux
             .take(1)
             .filter(p -> ds.equals(p.getDs()))
-            .defaultIfEmpty(this.getCityWeatherFromApi(cityName).block());
+            .switchIfEmpty(this.getCityWeatherFromApi(cityName));
         return Flux.merge(weatherTodayFlux, weatherFlux);
     }
 
