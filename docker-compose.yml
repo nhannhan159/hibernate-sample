@@ -1,0 +1,14 @@
+version: "3"
+services:
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zipkin
+    ports:
+      - 9411:9411
+  alibaba-rsocket-broker:
+    image: linuxchina/alibaba-rsocket-broker
+    container_name: rsocket-broker
+    ports:
+      - 9997:9997
+      - 9998:9998
+      - 9999:9999
