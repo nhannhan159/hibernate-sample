@@ -5,9 +5,10 @@ import dev.miku.r2dbc.mysql.MySqlConnectionFactory;
 import io.r2dbc.spi.ConnectionFactory;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.r2dbc.R2dbcProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.r2dbc.config.AbstractR2dbcConfiguration;
 import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
 
@@ -20,20 +21,23 @@ import org.springframework.data.r2dbc.repository.config.EnableR2dbcRepositories;
 public class R2dbcConfig extends AbstractR2dbcConfiguration {
 
     @Autowired
-    private R2dbcProperties properties;
+    private R2dbcExtProperties properties;
 
-    @Autowired
-    private R2dbcExtProperties extProperties;
+    @Bean
+    @Primary
+    public R2dbcExtProperties r2dbcProperties() {
+        return new R2dbcExtProperties();
+    }
 
     @NotNull
     @Override
     public ConnectionFactory connectionFactory() {
         return MySqlConnectionFactory.from(MySqlConnectionConfiguration.builder()
-            .host(extProperties.getHost())
-            .port(extProperties.getPort())
+            .host(properties.getHost())
+            .port(properties.getPort())
             .username(properties.getUsername())
             .password(properties.getPassword())
-            .database(extProperties.getDatabase())
+            .database(properties.getDatabase())
             .build());
     }
 }
