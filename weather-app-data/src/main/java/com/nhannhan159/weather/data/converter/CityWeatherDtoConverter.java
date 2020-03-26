@@ -5,7 +5,11 @@ import com.nhannhan159.weather.common.dto.*;
 import com.nhannhan159.weather.data.entity.CityWeatherDO;
 import com.nhannhan159.weather.data.entity.WeatherDO;
 import com.nhannhan159.weather.data.entity.embedded.*;
+import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
+
+import java.util.Objects;
 
 /**
  * @author tien.tan
@@ -26,4 +30,15 @@ public interface CityWeatherDtoConverter extends BaseConverter<CityWeatherDTO, C
     SysDTO convert(SysDO entity);
     WeatherDTO convert(WeatherDO entity);
     WindDTO convert(WindDO entity);
+
+    @AfterMapping
+    default void mapWeatherManyToOne(@MappingTarget CityWeatherDO entity) {
+        if (Objects.isNull(entity)) {
+            return;
+        }
+        if (Objects.isNull(entity.getWeather())) {
+            return;
+        }
+        entity.getWeather().forEach(weatherDO -> weatherDO.setCityWeather(entity));
+    }
 }
