@@ -1,0 +1,8 @@
+### get all city
+GET http://localhost:7001/api/cities
+
+### get all city weather
+GET http://localhost:7001/api/cityWeathers
+
+### get city weather
+GET http://localhost:7001/api/cityWeathers?cityName=hanoi
