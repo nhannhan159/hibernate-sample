@@ -1,7 +1,6 @@
 package com.nhannhan159.weather.data.entity;
 
 import lombok.Data;
-import org.springframework.data.relational.core.mapping.Table;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -11,12 +10,13 @@ import java.io.Serializable;
  */
 @Data
 @Entity
-@Table("weather")
+@Table(name = "weather")
 public class WeatherDO implements Serializable {
 
     @Id
+    private Long id;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "weather_id", nullable = false)
     private CityWeatherDO cityWeather;
 
     private String main;

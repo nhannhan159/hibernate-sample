@@ -2,10 +2,10 @@ package com.nhannhan159.weather.data.entity;
 
 import com.nhannhan159.weather.data.entity.embedded.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.data.domain.AbstractAggregateRoot;
-import org.springframework.data.relational.core.mapping.Table;
 
 import javax.persistence.*;
 import java.util.List;
@@ -14,17 +14,15 @@ import java.util.List;
  * @author tien.tan
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Entity
-@Table("city_weather")
-@Cache(region = "cityWeatherCache", usage = CacheConcurrencyStrategy.READ_ONLY)
+@Table(name = "city_weather")
+@Cache(region = "cityWeatherCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class CityWeatherDO extends AbstractAggregateRoot<CityWeatherDO> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column
-    private String cityName;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "cityWeather", cascade = CascadeType.ALL)
     private List<WeatherDO> weather;
@@ -45,6 +43,7 @@ public class CityWeatherDO extends AbstractAggregateRoot<CityWeatherDO> {
     @Embedded
     private CloudsDO clouds;
 
+    private String cityName;
     private String displayName;
     private String base;
     private String ds;
