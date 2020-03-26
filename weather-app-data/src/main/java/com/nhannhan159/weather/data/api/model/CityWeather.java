@@ -9,7 +9,7 @@ import java.util.List;
  */
 @Data
 public class CityWeather {
-    private Integer id;
+    private Long id;
     private String name;
     private String base;
     private Integer dt;

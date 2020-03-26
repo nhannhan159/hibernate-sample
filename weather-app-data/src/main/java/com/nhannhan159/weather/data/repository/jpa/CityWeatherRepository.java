@@ -14,7 +14,7 @@ import java.util.List;
 public interface CityWeatherRepository extends JpaRepository<CityWeatherDO, Integer> {
 
     @Nullable
-    CityWeatherDO findByCityNameIsLikeAndDs(String cityName, String ds);
+    CityWeatherDO findByNameIsLikeAndDs(String cityName, String ds);
 
-    List<CityWeatherDO> findByCityNameIsLikeOrderByDsDesc(String cityName);
+    List<CityWeatherDO> findByNameIsLikeOrderByDsDesc(String cityName);
 }
