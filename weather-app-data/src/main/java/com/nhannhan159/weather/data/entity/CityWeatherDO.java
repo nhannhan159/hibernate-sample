@@ -43,8 +43,7 @@ public class CityWeatherDO extends AbstractAggregateRoot<CityWeatherDO> {
     @Embedded
     private CloudsDO clouds;
 
-    private String cityName;
-    private String displayName;
+    private String name;
     private String base;
     private String ds;
     private Integer dt;

@@ -50,6 +50,6 @@ public interface CityWeatherApiConverter extends BaseConverter<CityWeather, City
     }
 
     default String getDs() {
-        return new SimpleDateFormat("yyyyMMDD").format(new Date());
+        return new SimpleDateFormat("yyyyMMdd").format(new Date());
     }
 }

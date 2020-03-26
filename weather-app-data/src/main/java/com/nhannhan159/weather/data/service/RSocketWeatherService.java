@@ -1,6 +1,7 @@
 package com.nhannhan159.weather.data.service;
 
 import com.alibaba.rsocket.RSocketService;
+import com.google.common.base.Strings;
 import com.nhannhan159.weather.common.dto.CityDTO;
 import com.nhannhan159.weather.common.dto.CityWeatherDTO;
 import com.nhannhan159.weather.common.facade.WeatherFacade;
@@ -18,9 +19,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.function.Function;
 
 /**
  * @author tien.tan
@@ -56,13 +59,28 @@ public class RSocketWeatherService implements WeatherFacade {
 
     @Override
     public Mono<CityWeatherDTO> getCityWeather(String cityName) {
-        var ds = new SimpleDateFormat("yyyyMMDD").format(new Date());
+        var ds = new SimpleDateFormat("yyyyMMdd").format(new Date());
         return this.getCityWeatherFromDb(cityName, ds)
             .switchIfEmpty(this.getCityWeatherFromApi(cityName));
     }
 
     @Override
     public Flux<CityWeatherDTO> getCityWeathers(String cityName) {
+        if (Strings.isNullOrEmpty(cityName)) {
+            return this.getCityWeathersFromAllCitiesInDb();
+        }
+        return this.getCityWeathersFromOneCity(cityName);
+    }
+
+    private Flux<CityWeatherDTO> getCityWeathersFromAllCitiesInDb() {
+        return this.getCities()
+            .map(CityDTO::getName)
+            .publishOn(Schedulers.parallel())
+            .map(this::getCityWeathersFromOneCity)
+            .flatMap(Function.identity());
+    }
+
+    private Flux<CityWeatherDTO> getCityWeathersFromOneCity(String cityName) {
         var ds = new SimpleDateFormat("yyyyMMDD").format(new Date());
         var weatherFlux = this.getCityWeatherFromDb(cityName);
         var weatherTodayFlux = weatherFlux
@@ -80,12 +98,12 @@ public class RSocketWeatherService implements WeatherFacade {
     }
 
     private Mono<CityWeatherDTO> getCityWeatherFromDb(String cityName, String ds) {
-        return ReactiveWrapper.toMono(() -> this.cityWeatherRepository.findByCityNameIsLikeAndDs(cityName, ds))
+        return ReactiveWrapper.toMono(() -> this.cityWeatherRepository.findByNameIsLikeAndDs(cityName, ds))
             .map(this.cityWeatherDtoConverter::convertBack);
     }
 
     private Flux<CityWeatherDTO> getCityWeatherFromDb(String cityName) {
-        return ReactiveWrapper.toFlux(() -> this.cityWeatherRepository.findByCityNameIsLikeOrderByDsDesc(cityName))
+        return ReactiveWrapper.toFlux(() -> this.cityWeatherRepository.findByNameIsLikeOrderByDsDesc(cityName))
             .map(this.cityWeatherDtoConverter::convertBack);
     }
 

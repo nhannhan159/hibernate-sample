@@ -18,7 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @ToString(callSuper = true)
 public class CityWeatherDTO extends BaseDTO {
-    private Integer id;
+    private Long id;
     private String name;
     private String base;
     private String ds;
