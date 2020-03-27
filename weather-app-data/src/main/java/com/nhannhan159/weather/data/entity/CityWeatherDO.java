@@ -16,7 +16,10 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "city_weather")
+@Table(
+    name = "city_weather",
+    indexes = @Index(name = "idx_name", columnList = "name")
+)
 @Cache(region = "cityWeatherCache", usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class CityWeatherDO extends AbstractAggregateRoot<CityWeatherDO> {
 
