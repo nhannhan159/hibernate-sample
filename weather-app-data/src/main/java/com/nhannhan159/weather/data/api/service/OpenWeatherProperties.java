@@ -10,5 +10,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("com.nhannhan159.api.open-weather")
 public class OpenWeatherProperties {
     private String url;
+    private String bulkUrl;
     private String appId;
 }
