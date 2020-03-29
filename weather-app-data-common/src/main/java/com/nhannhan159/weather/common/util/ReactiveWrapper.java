@@ -19,9 +19,17 @@ public class ReactiveWrapper {
             .subscribeOn(Schedulers.boundedElastic());
     }
 
+    public static <T> Mono<T> toMono(final Mono<T> mono) {
+        return mono.subscribeOn(Schedulers.boundedElastic());
+    }
+
     public static <T> Flux<T> toFlux(final Callable<List<T>> callable) {
         return Mono.fromCallable(callable)
             .subscribeOn(Schedulers.boundedElastic())
             .flatMapMany(Flux::fromIterable);
+    }
+
+    public static <T> Flux<T> toFlux(final Flux<T> flux) {
+        return flux.subscribeOn(Schedulers.boundedElastic());
     }
 }
