@@ -12,7 +12,7 @@ public class CityWeather {
     private Long id;
     private String name;
     private String base;
-    private Integer dt;
+    private Long dt;
     private Integer cod;
     private List<Weather> weather;
     private Coord coord;
@@ -20,4 +20,6 @@ public class CityWeather {
     private Main main;
     private Wind wind;
     private Clouds clouds;
+    private City city;
+    private Long time;
 }

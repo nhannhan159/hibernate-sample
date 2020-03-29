@@ -1,29 +1,28 @@
 package com.nhannhan159.weather.data.api.service;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.nhannhan159.weather.common.util.ReactiveWrapper;
 import com.nhannhan159.weather.data.api.model.City;
 import com.nhannhan159.weather.data.api.model.CityWeather;
 import com.nhannhan159.weather.data.util.ResourceUtils;
-import io.netty.channel.ChannelOption;
-import io.netty.handler.logging.LogLevel;
-import io.netty.handler.logging.LoggingHandler;
-import io.netty.handler.timeout.ReadTimeoutHandler;
-import io.netty.handler.timeout.WriteTimeoutHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.core.io.ByteArrayResource;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.ResponseExtractor;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
-import reactor.netty.http.client.HttpClient;
-import reactor.netty.tcp.TcpClient;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author tien.tan
@@ -37,13 +36,17 @@ public class OpenWeatherApiService {
     private static final String BULK_WEATHERS = "weather_14.json.gz";
     private static final String APP_ID = "appid";
     private final OpenWeatherProperties properties;
+    private final WebClient.Builder webClientBuilder;
+    private final RestTemplateBuilder restTemplateBuilder;
+    private RestTemplate restTemplate;
     private WebClient client;
     private WebClient bulkClient;
 
     @PostConstruct
     public void init() {
-        this.client = this.webClient(this.properties.getUrl());
-        this.bulkClient = this.webClient(this.properties.getBulkUrl());
+        this.restTemplate = this.restTemplateBuilder.build();
+        this.client = this.webClientBuilder.baseUrl(this.properties.getUrl()).build();
+        this.bulkClient = this.webClientBuilder.baseUrl(this.properties.getBulkUrl()).build();
     }
 
     public Mono<CityWeather> fetchCityWeather(String cityName) {
@@ -58,52 +61,39 @@ public class OpenWeatherApiService {
     }
 
     public Flux<City> fetchBulkCities() {
-        return this.fetchResource(BULK_CITIES)
-            .publishOn(Schedulers.boundedElastic())
-            .flatMapMany(resource -> ResourceUtils.readLinesFromByteArrayResource(resource, true))
-            .map(line -> new Gson().fromJson(line, City.class));
+        var cityListType = new TypeToken<ArrayList<City>>(){}.getType();
+        var url = UriComponentsBuilder.fromHttpUrl(this.properties.getBulkUrl()).build(BULK_CITIES).toString();
+        return ReactiveWrapper.toFlux(() -> this.retrieveResource(url, clientHttpResponse -> {
+            var rawStr = ResourceUtils.readAllLinesFromGzipStream(clientHttpResponse.getBody());
+            List<City> response = null;
+            try {
+                response = new Gson().fromJson(rawStr, cityListType);
+            } catch (Exception e) {
+                log.error("error while parse json", e);
+            }
+            return response;
+        }));
     }
 
+    /**
+     * TODO: something still blocking
+     */
     public Flux<CityWeather> fetchBulkWeathers() {
-        return this.fetchResource(BULK_WEATHERS)
-            .publishOn(Schedulers.boundedElastic())
-            .flatMapMany(resource -> ResourceUtils.readAllLinesFromByteArrayResource(resource, true))
-            .map(line -> new Gson().fromJson(line, CityWeather.class));
+        var url = UriComponentsBuilder.fromHttpUrl(this.properties.getBulkUrl()).build(BULK_WEATHERS).toString();
+        return ReactiveWrapper.toFlux(this.retrieveResource(url, clientHttpResponse ->
+            ResourceUtils.readLinesFromGzipStream(clientHttpResponse.getBody()))
+                .map(line -> {
+                    CityWeather response = null;
+                    try {
+                        response = new Gson().fromJson(line, CityWeather.class);
+                    } catch (Exception e) {
+                        log.error("error while parse json", e);
+                    }
+                    return response;
+                }));
     }
 
-    private Mono<ByteArrayResource> fetchResource(String resourceName) {
-        return this.bulkClient.get()
-            .uri(uriBuilder -> uriBuilder
-                .queryParam(APP_ID, this.properties.getAppId())
-                .build(resourceName))
-            .accept(MediaType.TEXT_PLAIN)
-            .retrieve()
-            .bodyToMono(ByteArrayResource.class);
-    }
-
-    public void fetchResourceTest(String resourceName) {
-        this.bulkClient.get()
-            .uri(uriBuilder -> uriBuilder
-                .queryParam(APP_ID, this.properties.getAppId())
-                .build(resourceName))
-            .accept(MediaType.TEXT_PLAIN)
-            .retrieve()
-            .bodyToMono(String.class)
-            .subscribe(log::info);
-    }
-
-    private WebClient webClient(String baseUrl) {
-        var tcpClient = TcpClient.create()
-            .wiretap(true)
-            .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 100000)
-            .doOnConnected(connection ->
-                connection.addHandlerLast(new LoggingHandler(LogLevel.TRACE))
-                    .addHandlerLast(new ReadTimeoutHandler(100))
-                    .addHandlerLast(new WriteTimeoutHandler(100)));
-        var httpConnector = new ReactorClientHttpConnector(HttpClient.from(tcpClient));
-        return WebClient.builder()
-            .clientConnector(httpConnector)
-            .baseUrl(baseUrl)
-            .build();
+    private <T> T retrieveResource(String url, ResponseExtractor<T> extractor) {
+        return this.restTemplate.execute(url, HttpMethod.GET, null, extractor);
     }
 }
