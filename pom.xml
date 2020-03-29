@@ -60,13 +60,6 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
-                <groupId>com.google.protobuf</groupId>
-                <artifactId>protobuf-bom</artifactId>
-                <version>${protobuf-java.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
                 <groupId>com.alibaba.rsocket</groupId>
                 <artifactId>alibaba-rsocket-service-common</artifactId>
                 <version>${alibaba-rsocket.version}</version>
