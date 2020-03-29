@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class Main {
     private Double temp;
-    private Integer pressure;
+    private Double pressure;
     private Integer humidity;
     @SerializedName("temp_min")
     private Double tempMin;

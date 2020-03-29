@@ -10,6 +10,7 @@ import org.springframework.boot.web.client.RestTemplateCustomizer;
 import org.springframework.boot.web.reactive.function.client.WebClientCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.client.BufferingClientHttpRequestFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import reactor.netty.http.client.HttpClient;
@@ -50,6 +51,7 @@ public class WebClientConfig {
                 simpleRequestFactory.setConnectTimeout(100000);
                 simpleRequestFactory.setReadTimeout(100000);
             }
+            restTemplate.setRequestFactory(new BufferingClientHttpRequestFactory(requestFactory));
         };
     }
 }

@@ -26,8 +26,7 @@ public class ResourceUtils {
                  var isr = new InputStreamReader(gis);
                  var reader = new BufferedReader(isr)) {
                 while(reader.ready()) {
-                    String line = reader.readLine();
-                    sink.next(line);
+                    sink.next(reader.readLine());
                 }
             } catch (IOException e) {
                 log.error(ERROR_MSG, e);
@@ -41,8 +40,7 @@ public class ResourceUtils {
             try (var isr = new InputStreamReader(is);
                  var reader = new BufferedReader(isr)) {
                 while(reader.ready()) {
-                    String line = reader.readLine();
-                    sink.next(line);
+                    sink.next(reader.readLine());
                 }
             } catch (IOException e) {
                 log.error(ERROR_MSG, e);
