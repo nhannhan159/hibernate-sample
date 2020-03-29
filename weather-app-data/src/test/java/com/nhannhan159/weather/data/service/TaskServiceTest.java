@@ -40,6 +40,15 @@ public class TaskServiceTest {
             .verify();
     }
 
+    @Test
+    public void getBulkCityWeather_success() {
+        var source = this.openWeatherApiService.fetchBulkWeathers();
+        StepVerifier.create(source)
+            .expectNextCount(22635)
+            .expectComplete()
+            .verify();
+    }
+
     public <T> Flux<T> appendBoomError(Flux<T> source) {
         return source.concatWith(Mono.error(new IllegalArgumentException("boom")));
     }
