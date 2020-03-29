@@ -1,11 +1,10 @@
 package com.nhannhan159.weather.web.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.CacheControl;
-import org.springframework.web.reactive.config.ResourceHandlerRegistry;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.web.reactive.config.WebFluxConfigurer;
-
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author tien.tan
@@ -13,10 +12,17 @@ import java.util.concurrent.TimeUnit;
 @Configuration
 public class WebConfig implements WebFluxConfigurer {
 
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/static/**")
-            .addResourceLocations("classpath:/static/")
-            .setCacheControl(CacheControl.maxAge(365, TimeUnit.DAYS));
+    /**
+     * overriding SecurityWebFilterChain bean in ReactiveOAuth2ClientConfigurations,
+     * dont use servlet filter
+     */
+    @Bean
+    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
+        http.authorizeExchange()
+            .pathMatchers("/static/**").permitAll()
+            .anyExchange().authenticated();
+        http.oauth2Login();
+        http.oauth2Client();
+        return http.build();
     }
 }
