@@ -4,6 +4,7 @@
 .DS_Store
 .settings
 .springBeans
+.factoryPath
 bin
 build.sh
 integration-repo
@@ -14,8 +15,8 @@ derby.log
 spring-test/test-output/
 argfile*
 
+build/
 classes/
-/build
 buildSrc/build
 /spring-*/build
 /src/asciidoc/build

@@ -22,13 +22,10 @@ import reactor.test.StepVerifier;
 public class TaskServiceTest {
 
     @Autowired
-    private TaskService taskService;
-
-    @Autowired
     private OpenWeatherApiService openWeatherApiService;
 
     @Test
-    public void getBulkCities_success() {
+    public void api_getBulkCities_success() {
         var city1 = new City().setId(833L).setName("Ḩeşār-e Sefīd").setCountry("IR").setCoord(new Coord(47.159401, 34.330502));
         var city2 = new City().setId(2960L).setName("‘Ayn Ḩalāqīm").setCountry("SY").setCoord(new Coord(36.321911, 34.940079));
         var source = this.openWeatherApiService.fetchBulkCities();
@@ -41,7 +38,7 @@ public class TaskServiceTest {
     }
 
     @Test
-    public void getBulkCityWeather_success() {
+    public void api_getBulkCityWeather_success() {
         var source = this.openWeatherApiService.fetchBulkWeathers();
         StepVerifier.create(source)
             .expectNextCount(22635)

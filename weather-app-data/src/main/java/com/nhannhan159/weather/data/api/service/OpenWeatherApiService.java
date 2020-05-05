@@ -40,13 +40,11 @@ public class OpenWeatherApiService {
     private final RestTemplateBuilder restTemplateBuilder;
     private RestTemplate restTemplate;
     private WebClient client;
-    private WebClient bulkClient;
 
     @PostConstruct
     public void init() {
         this.restTemplate = this.restTemplateBuilder.build();
         this.client = this.webClientBuilder.baseUrl(this.properties.getUrl()).build();
-        this.bulkClient = this.webClientBuilder.baseUrl(this.properties.getBulkUrl()).build();
     }
 
     public Mono<CityWeather> fetchCityWeather(String cityName) {
