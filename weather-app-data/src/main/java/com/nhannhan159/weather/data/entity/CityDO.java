@@ -22,5 +22,11 @@ public class CityDO extends AbstractAggregateRoot<CityDO> {
 
     @Id
     @javax.persistence.Id
+    private Long id;
+
     private String name;
+    private String findname;
+    private String country;
+    private Double lon;
+    private Double lat;
 }

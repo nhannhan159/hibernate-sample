@@ -2,6 +2,7 @@ package com.nhannhan159.weather.data.entity.embedded;
 
 import lombok.Data;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 /**
@@ -10,5 +11,6 @@ import javax.persistence.Embeddable;
 @Data
 @Embeddable
 public class CloudsDO {
-    private Integer allc;
+    @Column(name = "allc")
+    private Integer all;
 }

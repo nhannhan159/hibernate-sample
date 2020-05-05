@@ -19,5 +19,9 @@ import java.util.List;
 @ToString(callSuper = true)
 public class CityDTO extends BaseDTO {
     private String name;
+    private String findname;
+    private String country;
+    private Double lon;
+    private Double lat;
     private List<CityWeatherDTO> cityWeathers;
 }
