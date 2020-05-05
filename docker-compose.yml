@@ -43,8 +43,8 @@ services:
     volumes:
       - ~/rocketmq/broker/logs:/home/rocketmq/logs
       - ~/rocketmq/broker/store:/home/rocketmq/store
-      - ~/rocketmq/broker/conf/broker.conf:/home/rocketmq/rocketmq-4.5.0/conf/broker.conf
-    command: sh mqbroker
+      - ./conf/rocketmq/broker/broker.conf:/opt/rocketmq/conf/broker.conf
+    command: sh mqbroker -c /opt/rocketmq/conf/broker.conf
   rocketmq-console:
     image: styletang/rocketmq-console-ng
     container_name: rocketmq-console
