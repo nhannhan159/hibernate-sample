@@ -70,7 +70,7 @@ public class OpenWeatherApiService {
                 log.error("error while parse json", e);
             }
             return response;
-        }));
+        })).doOnSubscribe(i -> log.info("subscribed bulk cities list"));
     }
 
     /**
@@ -88,7 +88,7 @@ public class OpenWeatherApiService {
                         log.error("error while parse json", e);
                     }
                     return response;
-                }));
+                })).doOnSubscribe(i -> log.info("subscribed bulk weather list"));
     }
 
     private <T> T retrieveResource(String url, ResponseExtractor<T> extractor) {
