@@ -22,16 +22,14 @@ public class TaskService {
     @Getter private Flux<CityWeather> bulkWeathersMessage;
 
     //@Scheduled(cron = "0 0 0 1 1/1 *")
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 50000)
     public void scheduleFetchBulkCities() {
-        this.bulkCitiesMessage = this.openWeatherApiService.fetchBulkCities()
-            .doOnSubscribe(i -> log.info("on subscribe: " + i.toString()));
+        this.bulkCitiesMessage = this.openWeatherApiService.fetchBulkCities();
     }
 
     //@Scheduled(cron = "0 0 0 1 1/1 *")
-    @Scheduled(fixedRate = 5000)
+    @Scheduled(fixedRate = 50000)
     public void scheduleFetchBulkWeathers() {
-        this.bulkWeathersMessage = this.openWeatherApiService.fetchBulkWeathers()
-            .doOnSubscribe(i -> log.info("on subscribe: " + i.toString()));
+        this.bulkWeathersMessage = this.openWeatherApiService.fetchBulkWeathers();
     }
 }
