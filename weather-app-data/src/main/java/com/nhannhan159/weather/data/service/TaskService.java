@@ -1,14 +1,15 @@
 package com.nhannhan159.weather.data.service;
 
+import com.nhannhan159.weather.data.stream.OpenWeatherStream;
 import com.nhannhan159.weather.openweather.client.OpenWeatherBulkApiClient;
-import com.nhannhan159.weather.openweather.model.City;
-import com.nhannhan159.weather.openweather.model.CityWeather;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.integration.support.MessageBuilder;
+import org.springframework.messaging.MessageChannel;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Flux;
 
 /**
  * @author tien.tan
@@ -18,18 +19,32 @@ import reactor.core.publisher.Flux;
 @Service
 public class TaskService {
     private final OpenWeatherBulkApiClient openWeatherApiClient;
-    @Getter private Flux<City> bulkCitiesMessage;
-    @Getter private Flux<CityWeather> bulkWeathersMessage;
+
+    @Autowired
+    @Qualifier(OpenWeatherStream.BULK_CITIES_OUT)
+    private MessageChannel bulkCitiesOutChannel;
+
+    @Autowired
+    @Qualifier(OpenWeatherStream.BULK_CITIES_OUT)
+    private MessageChannel bulkWeathersOutChannel;
 
     //@Scheduled(cron = "0 0 0 1 1/1 *")
     @Scheduled(fixedRate = 50000)
     public void scheduleFetchBulkCities() {
-        this.bulkCitiesMessage = this.openWeatherApiClient.fetchBulkCities();
+        this.openWeatherApiClient.fetchBulkCities()
+            .subscribe(payload -> {
+                var message = MessageBuilder.withPayload(payload).build();
+                this.bulkCitiesOutChannel.send(message);
+            });
     }
 
     //@Scheduled(cron = "0 0 0 1 1/1 *")
-    //@Scheduled(fixedRate = 50000)
-    //public void scheduleFetchBulkWeathers() {
-    //    this.bulkWeathersMessage = this.openWeatherApiService.fetchBulkWeathers();
-    //}
+    @Scheduled(fixedRate = 50000)
+    public void scheduleFetchBulkWeathers() {
+        this.openWeatherApiClient.fetchBulkWeathers()
+            .subscribe(payload -> {
+                var message = MessageBuilder.withPayload(payload).build();
+                this.bulkCitiesOutChannel.send(message);
+            });
+    }
 }

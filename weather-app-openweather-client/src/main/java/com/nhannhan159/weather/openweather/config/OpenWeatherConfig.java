@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.reactive.function.client.WebClientCustomizer;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.cloud.openfeign.support.SpringMvcContract;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
@@ -69,6 +70,7 @@ public class OpenWeatherConfig {
     @Bean
     OpenWeatherBulkApiClient openWeatherBulkApiClient() {
         return Feign.builder()
+            .contract(new SpringMvcContract())
             .options(requestOptions())
             .target(OpenWeatherBulkApiClient.class, properties.getBulkUrl());
     }
