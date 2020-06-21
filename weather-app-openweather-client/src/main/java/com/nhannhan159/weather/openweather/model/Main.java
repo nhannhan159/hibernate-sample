@@ -1,4 +1,4 @@
-package com.nhannhan159.weather.data.api.model;
+package com.nhannhan159.weather.openweather.model;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;

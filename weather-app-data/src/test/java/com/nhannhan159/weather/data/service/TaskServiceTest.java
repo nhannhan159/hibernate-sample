@@ -1,8 +1,9 @@
 package com.nhannhan159.weather.data.service;
 
-import com.nhannhan159.weather.data.api.model.City;
-import com.nhannhan159.weather.data.api.model.Coord;
-import com.nhannhan159.weather.data.api.service.OpenWeatherApiService;
+import com.nhannhan159.weather.openweather.client.OpenWeatherApiClient;
+import com.nhannhan159.weather.openweather.client.OpenWeatherBulkApiClient;
+import com.nhannhan159.weather.openweather.model.City;
+import com.nhannhan159.weather.openweather.model.Coord;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,13 +23,13 @@ import reactor.test.StepVerifier;
 public class TaskServiceTest {
 
     @Autowired
-    private OpenWeatherApiService openWeatherApiService;
+    private OpenWeatherBulkApiClient openWeatherApiClient;
 
     @Test
     public void api_getBulkCities_success() {
         var city1 = new City().setId(833L).setName("Ḩeşār-e Sefīd").setCountry("IR").setCoord(new Coord(47.159401, 34.330502));
         var city2 = new City().setId(2960L).setName("‘Ayn Ḩalāqīm").setCountry("SY").setCoord(new Coord(36.321911, 34.940079));
-        var source = this.openWeatherApiService.fetchBulkCities();
+        var source = this.openWeatherApiClient.fetchBulkCities();
         StepVerifier.create(source)
             .expectNext(city1)
             .expectNext(city2)
@@ -39,7 +40,7 @@ public class TaskServiceTest {
 
     @Test
     public void api_getBulkCityWeather_success() {
-        var source = this.openWeatherApiService.fetchBulkWeathers();
+        var source = this.openWeatherApiClient.fetchBulkWeathers();
         StepVerifier.create(source)
             .expectNextCount(22635)
             .expectComplete()

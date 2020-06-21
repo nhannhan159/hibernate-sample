@@ -6,7 +6,6 @@ import com.nhannhan159.weather.common.dto.CityDTO;
 import com.nhannhan159.weather.common.dto.CityWeatherDTO;
 import com.nhannhan159.weather.common.facade.WeatherFacade;
 import com.nhannhan159.weather.common.util.ReactiveWrapper;
-import com.nhannhan159.weather.data.api.service.OpenWeatherApiService;
 import com.nhannhan159.weather.data.converter.CityDtoConverter;
 import com.nhannhan159.weather.data.converter.CityWeatherApiConverter;
 import com.nhannhan159.weather.data.converter.CityWeatherDtoConverter;
@@ -14,6 +13,7 @@ import com.nhannhan159.weather.data.entity.CityDO;
 import com.nhannhan159.weather.data.entity.CityWeatherDO;
 import com.nhannhan159.weather.data.repository.jpa.CityWeatherRepository;
 import com.nhannhan159.weather.data.repository.reactive.ReactiveCityRepository;
+import com.nhannhan159.weather.openweather.client.OpenWeatherApiClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -33,7 +33,7 @@ import java.util.function.Function;
 @RSocketService(serviceInterface = WeatherFacade.class)
 @Service
 public class RSocketWeatherService implements WeatherFacade {
-    private final OpenWeatherApiService openWeatherApiService;
+    private final OpenWeatherApiClient openWeatherApiClient;
     private final CityDtoConverter cityDtoConverter;
     private final CityWeatherDtoConverter cityWeatherDtoConverter;
     private final CityWeatherApiConverter cityWeatherApiConverter;
@@ -91,7 +91,7 @@ public class RSocketWeatherService implements WeatherFacade {
     }
 
     private Mono<CityWeatherDTO> getCityWeatherFromApi(String cityName) {
-        return this.openWeatherApiService.fetchCityWeather(cityName)
+        return this.openWeatherApiClient.fetchCityWeather(cityName)
             .map(this.cityWeatherApiConverter::convert)
             .doOnSuccess(this::saveCityWeatherToDb)
             .map(this.cityWeatherDtoConverter::convertBack);

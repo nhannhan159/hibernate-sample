@@ -1,10 +1,9 @@
 package com.nhannhan159.weather.data.config;
 
-import com.nhannhan159.weather.data.api.model.City;
-import com.nhannhan159.weather.data.api.model.CityWeather;
-import com.nhannhan159.weather.data.service.QueueListener;
 import com.nhannhan159.weather.data.service.QueuePolledConsumer;
 import com.nhannhan159.weather.data.service.TaskService;
+import com.nhannhan159.weather.openweather.model.City;
+import com.nhannhan159.weather.openweather.model.CityWeather;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.function.context.PollableBean;
 import org.springframework.cloud.stream.annotation.EnableBinding;

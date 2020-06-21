@@ -1,10 +1,10 @@
 package com.nhannhan159.weather.data.converter;
 
 import com.nhannhan159.weather.common.base.BaseConverter;
-import com.nhannhan159.weather.data.api.model.*;
 import com.nhannhan159.weather.data.entity.CityWeatherDO;
 import com.nhannhan159.weather.data.entity.WeatherDO;
 import com.nhannhan159.weather.data.entity.embedded.*;
+import com.nhannhan159.weather.openweather.model.*;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

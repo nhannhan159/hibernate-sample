@@ -1,20 +1,21 @@
-package com.nhannhan159.weather.data.util;
+package com.nhannhan159.weather.common.util;
 
-import lombok.extern.slf4j.Slf4j;
+import com.nhannhan159.weather.common.base.AppException;
+import com.nhannhan159.weather.common.base.ErrorCode;
 import org.springframework.core.io.ByteArrayResource;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Optional;
 import java.util.zip.GZIPInputStream;
 
 /**
  * @author tien.tan
  */
-@Slf4j
 public class ResourceUtils {
     private static final String ERROR_MSG = "error reading stream";
 
@@ -29,7 +30,8 @@ public class ResourceUtils {
                     sink.next(reader.readLine());
                 }
             } catch (IOException e) {
-                log.error(ERROR_MSG, e);
+                sink.error(new AppException(ErrorCode.SYSTEM_ERROR, ERROR_MSG, e));
+                return;
             }
             sink.complete();
         });
@@ -43,7 +45,8 @@ public class ResourceUtils {
                     sink.next(reader.readLine());
                 }
             } catch (IOException e) {
-                log.error(ERROR_MSG, e);
+                sink.error(new AppException(ErrorCode.SYSTEM_ERROR, ERROR_MSG, e));
+                return;
             }
             sink.complete();
         });
@@ -59,8 +62,7 @@ public class ResourceUtils {
             }
             return allLines.toString();
         } catch (IOException e) {
-            log.error(ERROR_MSG, e);
-            return null;
+            throw new AppException(ErrorCode.SYSTEM_ERROR, ERROR_MSG, e);
         }
     }
 
@@ -73,8 +75,7 @@ public class ResourceUtils {
             }
             return allLines.toString();
         } catch (IOException e) {
-            log.error(ERROR_MSG, e);
-            return null;
+            throw new AppException(ErrorCode.SYSTEM_ERROR, ERROR_MSG, e);
         }
     }
 
@@ -94,11 +95,11 @@ public class ResourceUtils {
         var monoStream = readStreamFromByteArrayResource(bar);
         if (isGz) {
             return monoStream
-                .map(i -> Optional.ofNullable(ResourceUtils.readAllLinesFromGzipStream(i))
+                .map(i -> Optional.of(ResourceUtils.readAllLinesFromGzipStream(i))
                     .orElseThrow());
         }
         return monoStream
-            .map(i -> Optional.ofNullable(ResourceUtils.readAllLinesFromStream(i))
+            .map(i -> Optional.of(ResourceUtils.readAllLinesFromStream(i))
                 .orElseThrow());
     }
 
@@ -107,19 +108,18 @@ public class ResourceUtils {
             try (var is = bar.getInputStream()) {
                 return is;
             } catch (IOException e) {
-                log.error(ERROR_MSG, e);
-                return null;
+                throw new AppException(ErrorCode.SYSTEM_ERROR, ERROR_MSG, e);
             }
         });
     }
 
     public static void main(String[] args) {
-        Resource fileResource = new ClassPathResource("weather_14.json.gz");
-        try (var fis = new FileInputStream(fileResource.getFile())) {
-            readLinesFromGzipStream(fis)
-                .subscribe(log::info);
-        } catch (IOException e) {
-            log.error(ERROR_MSG, e);
-        }
+        //Resource fileResource = new ClassPathResource("weather_14.json.gz");
+        //try (var fis = new FileInputStream(fileResource.getFile())) {
+        //    readLinesFromGzipStream(fis)
+        //        .subscribe(log::info);
+        //} catch (IOException e) {
+        //    log.error(ERROR_MSG, e);
+        //}
     }
 }

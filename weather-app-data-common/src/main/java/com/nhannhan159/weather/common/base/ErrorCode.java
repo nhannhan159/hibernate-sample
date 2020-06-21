@@ -40,16 +40,32 @@ public enum ErrorCode {
      * API_OPERATION_REPEAT_ERROR
      */
     API_OPERATION_REPEAT_ERROR("API_OPERATION_REPEAT_ERROR", 400, "Interface cannot be repeated"),
+
+    /**
+     * OPEN_WEATHER_BAD_REQUEST_ERROR
+     */
+    OPEN_WEATHER_BAD_REQUEST_ERROR("OPEN_WEATHER_BAD_REQUEST_ERROR", 400, "Open weather api bad request"),
+
+    /**
+     * OPEN_WEATHER_NOT_FOUND_ERROR
+     */
+    OPEN_WEATHER_NOT_FOUND_ERROR("OPEN_WEATHER_NOT_FOUND_ERROR", 400, "Open weather api not found"),
+
+    /**
+     * OPEN_WEATHER_GENERIC_ERROR
+     */
+    OPEN_WEATHER_GENERIC_ERROR("OPEN_WEATHER_GENERIC_ERROR", 400, "Open weather api generic error"),
+
     ;
 
     @Getter
-    private String code;
+    private final String code;
 
     @Getter
-    private int httpCode;
+    private final int httpCode;
 
     @Getter
-    private String message;
+    private final String message;
 
     ErrorCode(String code, int httpCode, String message) {
         this.code = code;

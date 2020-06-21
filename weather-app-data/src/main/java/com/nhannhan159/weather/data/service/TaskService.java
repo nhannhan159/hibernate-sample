@@ -1,8 +1,8 @@
 package com.nhannhan159.weather.data.service;
 
-import com.nhannhan159.weather.data.api.model.City;
-import com.nhannhan159.weather.data.api.model.CityWeather;
-import com.nhannhan159.weather.data.api.service.OpenWeatherApiService;
+import com.nhannhan159.weather.openweather.client.OpenWeatherBulkApiClient;
+import com.nhannhan159.weather.openweather.model.City;
+import com.nhannhan159.weather.openweather.model.CityWeather;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,19 +17,19 @@ import reactor.core.publisher.Flux;
 @RequiredArgsConstructor
 @Service
 public class TaskService {
-    private final OpenWeatherApiService openWeatherApiService;
+    private final OpenWeatherBulkApiClient openWeatherApiClient;
     @Getter private Flux<City> bulkCitiesMessage;
     @Getter private Flux<CityWeather> bulkWeathersMessage;
 
     //@Scheduled(cron = "0 0 0 1 1/1 *")
     @Scheduled(fixedRate = 50000)
     public void scheduleFetchBulkCities() {
-        this.bulkCitiesMessage = this.openWeatherApiService.fetchBulkCities();
+        this.bulkCitiesMessage = this.openWeatherApiClient.fetchBulkCities();
     }
 
     //@Scheduled(cron = "0 0 0 1 1/1 *")
-    @Scheduled(fixedRate = 50000)
-    public void scheduleFetchBulkWeathers() {
-        this.bulkWeathersMessage = this.openWeatherApiService.fetchBulkWeathers();
-    }
+    //@Scheduled(fixedRate = 50000)
+    //public void scheduleFetchBulkWeathers() {
+    //    this.bulkWeathersMessage = this.openWeatherApiService.fetchBulkWeathers();
+    //}
 }
